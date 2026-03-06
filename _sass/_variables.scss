@@ -87,6 +87,10 @@ $dt-width: 180px;
 $dt-dd-space: 20px;
 $dd-position: $dt-width+$dt-dd-space;
 
+// Custom Gradient Color
+$gradient-start: #fcc2d7; 
+$gradient-end: #d0bfff;   
+
 // Mobile breakpoints
 @mixin mobile {
   @media screen and (max-width: 1200px) {
