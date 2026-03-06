@@ -22,6 +22,7 @@ html {
 body {
   font-family: $base-font;
   color: $base-color;
+  background-color: #fff5f7;
   line-height: 1.7em;
 }
 
@@ -429,6 +430,7 @@ nav {
 // content
 
 .wrapper-content {
+  background-color: transparent;  
   float: right;
   width: 70%;
 
