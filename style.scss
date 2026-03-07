@@ -760,4 +760,9 @@ footer {
 @import "highlights";
 @import "gitalk";
 
+.wrapper-content p,
+.wrapper-content li,
+.wrapper-content blockquote {
+  color: #000000;
+}
 
