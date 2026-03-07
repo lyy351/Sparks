@@ -97,3 +97,7 @@ $gradient-end: #e6e6fa;
     @content;
   }
 }
+
+.tags .label > li > a {
+  color: #ffffff;
+}
