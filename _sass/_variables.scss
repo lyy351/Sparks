@@ -37,7 +37,7 @@ $base-color: $oc-grape-8;
 $base-lighten-color: $oc-pink-6;
 $base-lightener-color: $oc-pink-4;
 
-$background-color: $oc-pink-0;
+$background-color: #ffffff;
 $background-lighten-color: hsla(197, 25%, 96%, 0.42);
 
 $text-color: $base-color;
@@ -99,5 +99,5 @@ $gradient-end: #e6e6fa;
 }
 
 .tags .label > li > a {
-  color: #ffffff;
+  color: $oc-yellow-2;
 }
