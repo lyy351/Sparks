@@ -278,11 +278,11 @@ img {
 
 // Specify the color of the selection
 ::-moz-selection {
-//  color: $selection-color;
+  color: $selection-color;
   background: $selection-background-color;
 }
 ::selection {
-//  color: $selection-color;
+  color: $selection-color;
   background: $selection-background-color;
 }
 
