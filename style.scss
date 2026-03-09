@@ -766,23 +766,37 @@ footer {
   color: #000000;
 }
 
+/* ===== 分类页样式（与标签页风格统一） ===== */
 .category-list {
-  list-style: none;
-  padding: 0;
+  list-style: none;          // 移除默认列表标记
+  padding-left: 0;            // 移除左内边距
+  margin-left: 0;             // 移除左外边距
   margin-bottom: 2em;
+
   li {
     display: inline-block;
-    margin: 0 10px 10px 0;
+    margin: 0 10px 10px 0;    // 标签之间的间距
+
+    /* 关键：移除全局的圆点伪元素 */
+    &:before {
+      content: none !important;
+    }
+
     a {
       display: inline-block;
       padding: 4px 8px;
-      background-color: $tag-index-label-background-color;
+      background-color: $tag-index-label-background-color; // 和标签页背景色一致
       border-radius: 3px;
       color: $base-color;
       text-decoration: none;
+      font-size: $small-font-size; // 和标签页字体大小一致
+      font-weight: 300;            // 和标签页字体粗细一致
+
       &:hover {
         background-color: $link-bghv-color;
+        color: $link-color;        // 悬停时文字颜色变为链接色（可选）
       }
+
       .count {
         margin-left: 5px;
         font-size: 0.9em;
@@ -792,17 +806,24 @@ footer {
   }
 }
 
+/* 分类页文章列表样式（同样去掉圆点） */
 .category-posts {
   list-style: none;
-  padding: 0;
-  margin-bottom: 2em;
+  padding-left: 0;
+
   li {
     margin-bottom: 0.5em;
     border-bottom: 1px dashed $divider-color;
     padding: 0.3em 0;
+
+    &:before {
+      content: none !important;    // 移除文章列表前的圆点
+    }
+
     a {
       font-weight: 500;
     }
+
     time {
       float: right;
       color: $base-lighten-color;
