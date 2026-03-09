@@ -322,7 +322,7 @@ function toggleSearch() {
       var sjs = SimpleJekyllSearch({
         searchInput: searchInput,
         resultsContainer: document.getElementById('search-results'),
-        json: '{{ site.baseurl }}/search.json',
+        json: '{{ site.baseurl }}/tags/search.json',
         searchResultTemplate: '<div></div>', // 占位，实际用自定义渲染
         noResultsText: '',
         limit: 20,
