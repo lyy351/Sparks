@@ -342,7 +342,7 @@ function toggleSearch() {
   });
 </script>
 
-<!-- 样式（建议移到 style.scss） -->
+<!-- 样式（已转为纯CSS，可以直接用） -->
 <style>
   /* ===== 全局搜索框样式 ===== */
   .global-search {
@@ -364,10 +364,9 @@ function toggleSearch() {
     cursor: pointer;
     user-select: none;
     transition: all 0.2s ease;
-    
-    &:hover {
-      background-color: #e0e0e0;
-    }
+  }
+  .search-toggle:hover {
+    background-color: #e0e0e0;
   }
 
   #search-container {
@@ -383,11 +382,10 @@ function toggleSearch() {
     outline: none;
     transition: all 0.2s ease;
     box-sizing: border-box;
-    
-    &:focus {
-      border-color: #999;
-      box-shadow: 0 0 0 3px rgba(0,0,0,0.05);
-    }
+  }
+  #search-input:focus {
+    border-color: #999;
+    box-shadow: 0 0 0 3px rgba(0,0,0,0.05);
   }
 
   #search-results {
@@ -401,44 +399,38 @@ function toggleSearch() {
     margin-bottom: 20px;
     padding-bottom: 15px;
     border-bottom: 1px dashed #ddd;
-    
-    h4 {
-      margin: 0 0 8px;
-      font-size: 18px;
-      
-      a {
-        color: #333;
-        text-decoration: none;
-        
-        &:hover {
-          color: #666;
-          text-decoration: underline;
-        }
-      }
-      
-      .result-date {
-        font-size: 13px;
-        font-weight: normal;
-        color: #999;
-        margin-left: 10px;
-      }
-    }
-    
-    .result-snippet {
-      font-size: 14px;
-      line-height: 1.6;
-      color: #444;
-      background-color: #f9f9f9;
-      padding: 10px 12px;
-      border-radius: 6px;
-      
-      mark {
-        background-color: #ffecb3;
-        padding: 2px 0;
-        border-radius: 2px;
-        font-weight: 500;
-      }
-    }
+  }
+  .search-result-item h4 {
+    margin: 0 0 8px;
+    font-size: 18px;
+  }
+  .search-result-item h4 a {
+    color: #333;
+    text-decoration: none;
+  }
+  .search-result-item h4 a:hover {
+    color: #666;
+    text-decoration: underline;
+  }
+  .search-result-item h4 .result-date {
+    font-size: 13px;
+    font-weight: normal;
+    color: #999;
+    margin-left: 10px;
+  }
+  .search-result-item .result-snippet {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #444;
+    background-color: #f9f9f9;
+    padding: 10px 12px;
+    border-radius: 6px;
+  }
+  .search-result-item .result-snippet mark {
+    background-color: #ffecb3;
+    padding: 2px 0;
+    border-radius: 2px;
+    font-weight: 500;
   }
 
   .no-results {
