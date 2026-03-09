@@ -4,7 +4,7 @@ title: 分类
 permalink: /category/
 ---
 
-<!-- 添加一个简单的分类筛选按钮区 -->
+<!-- 分类筛选按钮区 -->
 <div class="category-filter">
   <button class="filter-btn active" data-category="all">全部</button>
   {% for category in site.categories %}
@@ -22,8 +22,23 @@ permalink: /category/
       <ul class="category-posts">
         {% for post in category[1] %}
           <li>
-            <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a>
-            <time>{{ post.date | date: "%Y-%m-%d" }}</time>
+            <div class="post-item">
+              <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a>
+              <time>{{ post.date | date: "%Y-%m-%d" }}</time>
+              
+              <!-- 新增：显示这篇文章的其他标签（排除当前分类本身） -->
+              {% if post.tags.size > 0 %}
+                <div class="post-tags">
+                  <span class="tags-label">标签：</span>
+                  {% for tag in post.tags %}
+                    <!-- 只显示非当前分类的标签 -->
+                    {% if tag != category[0] %}
+                      <a href="{{ site.baseurl }}/tags#{{ tag | slugify }}" class="tag-link">#{{ tag }}</a>
+                    {% endif %}
+                  {% endfor %}
+                </div>
+              {% endif %}
+            </div>
           </li>
         {% endfor %}
       </ul>
@@ -31,7 +46,7 @@ permalink: /category/
   {% endfor %}
 </div>
 
-<!-- 添加 JavaScript 实现筛选功能 -->
+<!-- JavaScript 控制筛选功能（保持不变） -->
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     const filterButtons = document.querySelectorAll('.filter-btn');
@@ -39,13 +54,11 @@ permalink: /category/
 
     filterButtons.forEach(button => {
       button.addEventListener('click', function() {
-        // 移除所有按钮的 active 类
         filterButtons.forEach(btn => btn.classList.remove('active'));
         this.classList.add('active');
 
         const selectedCategory = this.dataset.category;
 
-        // 显示/隐藏分类区块
         categorySections.forEach(section => {
           if (selectedCategory === 'all' || section.dataset.category === selectedCategory) {
             section.style.display = 'block';
