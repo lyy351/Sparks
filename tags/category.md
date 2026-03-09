@@ -25,17 +25,14 @@ permalink: /category/
             <div class="post-item">
               <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a>
               <time>{{ post.date | date: "%Y-%m-%d" }}</time>
-              
-              <!-- 新增：显示这篇文章的其他标签（排除当前分类本身） -->
+
+              <!-- 显示这篇文章的其他标签（排除当前分类本身） -->
               {% if post.tags.size > 0 %}
-  <div class="post-tags">
-    {% for tag in post.tags %}
-      {% if tag != category[0] %}
-        <a href="{{ site.baseurl }}/tags#{{ tag | slugify }}" class="tag-link">{{ tag }}</a>
-      {% endif %}
-    {% endfor %}
-  </div>
-{% endif %}
+                <div class="post-tags">
+                  {% for tag in post.tags %}
+                    {% if tag != category[0] %}
+                      <a href="{{ site.baseurl }}/tags#{{ tag | slugify }}" class="tag-link">{{ tag }}</a>
+                    {% endif %}
                   {% endfor %}
                 </div>
               {% endif %}
@@ -47,7 +44,7 @@ permalink: /category/
   {% endfor %}
 </div>
 
-<!-- JavaScript 控制筛选功能（保持不变） -->
+<!-- JavaScript 控制筛选功能 -->
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     const filterButtons = document.querySelectorAll('.filter-btn');
