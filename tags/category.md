@@ -97,71 +97,16 @@ function toggleSearch() {
   {% endfor %}
 </div>
 
-<!-- 引入 Simple-Jekyll-Search -->
+<!-- 引入 Simple-Jekyll-Search 库（内联，确保稳定） -->
 <script>
-/*!
- * Simple-Jekyll-Search
- * Copyright 2015-2020, Christian Fei
- * Licensed under the MIT License.
- */
-!function(){"use strict";var e={trim:function(e){return e.replace(/^\s+|\s+$/g,"")},isArray:function(e){return Array.isArray?Array.isArray(e):"[object Array]"===Object.prototype.toString.call(e)},isFunction:function(e){return"function"==typeof e},toArray:function(e){return Array.prototype.slice.call(e)},map:function(e,t){if(e.map)return e.map(t);for(var n=[],r=0;r<e.length;r++)n.push(t(e[r],r));return n},filter:function(e,t){if(e.filter)return e.filter(t);for(var n=[],r=0;r<e.length;r++)t(e[r],r)&&n.push(e[r]);return n},keys:function(e){if(Object.keys)return Object.keys(e);var t=[];for(var n in e)e.hasOwnProperty(n)&&t.push(n);return t}},t=function(e,t){t=t||{};var n=this;n.initialize=function(){n.options=t;var r=t.searchInput;if(n.$searchInput="string"==typeof r?document.querySelector(r):r,n.$searchInput)if(n.options.resultsContainer="string"==typeof t.resultsContainer?document.querySelector(t.resultsContainer):t.resultsContainer,n.$resultsContainer){var i=n.options.source;if(e.isFunction(i))n.searchFn=i;else if(e.isArray(i)){var o=n.options;n.searchFn=function(e){return function(t){return e.search(t,o)}}(i)}else{var s=n.options;n.searchFn=function(e){return function(t){return e.search(t,s)}}(i)}n.bindEvent()}else throw new Error("SimpleJekyllSearch: resultsContainer not found");else throw new Error("SimpleJekyllSearch: searchInput not found")},n.bindEvent=function(){n.$searchInput.addEventListener("input",function(e){var t=e.target.value;n.options.fuzzy&&(t=n.addFuzzy(t));var r=n.searchFn(t);if(e.isFunction(n.options.renderResults))n.options.renderResults(r);else{var i=n.options;n.renderResults(r,i)}})},n.addFuzzy=function(e){var t=n.options.fuzzy;return"."===t||","===t?e+"[^"+t+"]*"+t:e+t},n.renderResults=function(t,r){var i=r.resultsContainer;n.clearResults(i);if(t.length){var o=e.map(t,function(e){return r.resultTemplate.replace(/\{(\w*)\}/g,function(t,n){return e[n]?e[n]:""})}).join("");i.insertAdjacentHTML("beforeend",o)}else{var s=r.noResultsText||"No results found";i.insertAdjacentHTML("beforeend","<li>"+s+"</li>")}},n.clearResults=function(e){for(;e.firstChild;)e.removeChild(e.firstChild)},n.initialize()},n=new t(window.simpleJekyllSearch||{},window.simpleJekyllSearchOptions);window.SimpleJekyllSearch=function(e){return new t(e)},"function"==typeof define&&define.amd?define("SimpleJekyllSearch",function(){return t}):"undefined"!=typeof module&&module.exports&&(module.exports=t)}();
+/*! simple-jekyll-search 1.10.0 */
+!function(){"use strict";var e={trim:function(e){return e.replace(/^\s+|\s+$/g,"")},isArray:function(e){return Array.isArray?Array.isArray(e):"[object Array]"===Object.prototype.toString.call(e)},isFunction:function(e){return"function"==typeof e},toArray:function(e){return Array.prototype.slice.call(e)},map:function(e,t){if(e.map)return e.map(t);for(var n=[],r=0;r<e.length;r++)n.push(t(e[r],r));return n},filter:function(e,t){if(e.filter)return e.filter(t);for(var n=[],r=0;r<e.length;r++)t(e[r],r)&&n.push(e[r]);return n},keys:function(e){if(Object.keys)return Object.keys(e);var t=[];for(var n in e)e.hasOwnProperty(n)&&t.push(n);return t}},t=function(e,t){t=t||{};var n=this;n.initialize=function(){n.options=t;var r=t.searchInput;if(n.$searchInput="string"==typeof r?document.querySelector(r):r,n.$searchInput)if(n.options.resultsContainer="string"==typeof t.resultsContainer?document.querySelector(t.resultsContainer):t.resultsContainer,n.$resultsContainer){var i=n.options.source;if(e.isFunction(i))n.searchFn=i;else if(e.isArray(i)){var o=n.options;n.searchFn=function(e){return function(t){return e.search(t,o)}}(i)}else{var s=n.options;n.searchFn=function(e){return function(t){return e.search(t,s)}}(i)}n.bindEvent()}else throw new Error("SimpleJekyllSearch: resultsContainer not found");else throw new Error("SimpleJekyllSearch: searchInput not found")},n.bindEvent=function(){n.$searchInput.addEventListener("input",function(e){var t=e.target.value;n.options.fuzzy&&(t=n.addFuzzy(t));var r=n.searchFn(t);if(e.isFunction(n.options.renderResults))n.options.renderResults(r);else{var i=n.options;n.renderResults(r,i)}})},n.addFuzzy=function(e){var t=n.options.fuzzy;return"."===t||","===t?e+"[^"+t+"]*"+t:e+t},n.renderResults=function(t,r){var i=r.resultsContainer;n.clearResults(i);if(t.length){var o=e.map(t,function(e){return r.resultTemplate.replace(/\{(\w*)\}/g,function(t,n){return e[n]?e[n]:""})}).join("");i.insertAdjacentHTML("beforeend",o)}else{var s=r.noResultsText||"No results found";i.insertAdjacentHTML("beforeend","<li>"+s+"</li>")}},n.clearResults=function(e){for(;e.firstChild;)e.removeChild(e.firstChild)},n.initialize()},window.SimpleJekyllSearch=function(e){return new t(window.simpleJekyllSearch||{},e)}}();
 </script>
 
-<!-- 搜索结果模板（占位，实际用自定义渲染） -->
-<script id="search-results-template" type="text/x-template">
-  <div class="search-result-item">
-    <h4><a href="{url}?kw={query}">{title}</a> <span class="result-date">{date}</span></h4>
-    <div class="result-snippet">{snippet}</div>
-  </div>
-</script>
-
-<!-- JavaScript 控制多级筛选、折叠和全局搜索 -->
+<!-- JavaScript 控制多级筛选、折叠和全局搜索（简化版，确保搜索稳定） -->
 <script>
-  // ========== 全局搜索相关函数 ==========
-  function extractSnippet(content, keyword, contextLength = 60) {
-    if (!content || !keyword) return '';
-    
-    var lowerContent = content.toLowerCase();
-    var lowerKeyword = keyword.toLowerCase();
-    var index = lowerContent.indexOf(lowerKeyword);
-    
-    if (index === -1) return content.substring(0, 200) + '…';
-    
-    var start = Math.max(0, index - contextLength);
-    var end = Math.min(content.length, index + keyword.length + contextLength);
-    
-    var snippet = (start > 0 ? '…' : '') + 
-                   content.substring(start, end) + 
-                   (end < content.length ? '…' : '');
-    
-    // 高亮关键词
-    var regex = new RegExp('(' + keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
-    return snippet.replace(regex, '<mark>$1</mark>');
-  }
-
-  function renderCustomResults(results, query) {
-    var container = document.getElementById('search-results');
-    container.style.display = 'block';
-    container.innerHTML = '';
-    
-    if (results.length === 0) {
-      container.innerHTML = '<p class="no-results">没有找到相关文章</p>';
-      return;
-    }
-    
-    results.forEach(function(result) {
-      var snippet = extractSnippet(result.content, query);
-      var html = '<div class="search-result-item">' +
-                 '<h4><a href="' + result.url + '?kw=' + encodeURIComponent(query) + '">' + 
-                 result.title + '</a> <span class="result-date">' + result.date + '</span></h4>' +
-                 '<div class="result-snippet">' + snippet + '</div>' +
-                 '</div>';
-      container.innerHTML += html;
-    });
-  }
-
-  // ========== 原有筛选逻辑保持不变 ==========
   document.addEventListener('DOMContentLoaded', function() {
+    // ---------- 原有的筛选逻辑 ----------
     const categoryButtons = document.querySelectorAll('.filter-btn');
     const categorySections = document.querySelectorAll('.category-section');
     const tagFilterDiv = document.getElementById('tag-filter');
@@ -173,11 +118,9 @@ function toggleSearch() {
     let currentTag = null;
     let currentAttr = null;
 
-    // 收集所有文章数据（用于筛选）
     const allPosts = [];
-    document.querySelectorAll('.post-item').forEach((item, index) => {
+    document.querySelectorAll('.post-item').forEach(item => {
       allPosts.push({
-        element: item,
         parentLi: item.closest('li'),
         parentSection: item.closest('.category-section'),
         category: item.closest('.category-section').dataset.category,
@@ -186,32 +129,22 @@ function toggleSearch() {
       });
     });
 
-    // 更新文章显示状态
     function updatePosts() {
       allPosts.forEach(post => {
         const matchesCategory = currentCategory === 'all' || post.category === currentCategory;
         const matchesTag = !currentTag || post.tags.includes(currentTag);
         const matchesAttr = !currentAttr || post.attrs.includes(currentAttr);
-
-        if (matchesCategory && matchesTag && matchesAttr) {
-          post.parentLi.style.display = '';
-        } else {
-          post.parentLi.style.display = 'none';
-        }
+        post.parentLi.style.display = matchesCategory && matchesTag && matchesAttr ? '' : 'none';
       });
-
-      // 更新分类区块的显示
       categorySections.forEach(section => {
         const visiblePosts = Array.from(section.querySelectorAll('li')).filter(li => li.style.display !== 'none');
         section.style.display = visiblePosts.length > 0 ? 'block' : 'none';
       });
     }
 
-    // 根据当前一级分类生成二级、三级按钮
     function generateSecondaryFilters(category) {
       const tagsSet = new Set();
       const attrsSet = new Set();
-
       allPosts.forEach(post => {
         if (category === 'all' || post.category === category) {
           post.tags.forEach(t => tagsSet.add(t));
@@ -219,7 +152,7 @@ function toggleSearch() {
         }
       });
 
-      // 生成标签按钮
+      // 标签按钮
       tagButtonsDiv.innerHTML = '';
       if (tagsSet.size > 0) {
         tagFilterDiv.style.display = 'block';
@@ -228,7 +161,6 @@ function toggleSearch() {
         allTagBtn.dataset.tag = '';
         allTagBtn.textContent = '全部';
         tagButtonsDiv.appendChild(allTagBtn);
-
         Array.from(tagsSet).sort().forEach(tag => {
           const btn = document.createElement('button');
           btn.className = 'secondary-btn';
@@ -240,7 +172,7 @@ function toggleSearch() {
         tagFilterDiv.style.display = 'none';
       }
 
-      // 生成属性按钮
+      // 属性按钮
       attrButtonsDiv.innerHTML = '';
       if (attrsSet.size > 0) {
         attrFilterDiv.style.display = 'block';
@@ -249,7 +181,6 @@ function toggleSearch() {
         allAttrBtn.dataset.attr = '';
         allAttrBtn.textContent = '全部';
         attrButtonsDiv.appendChild(allAttrBtn);
-
         Array.from(attrsSet).sort().forEach(attr => {
           const btn = document.createElement('button');
           btn.className = 'secondary-btn';
@@ -261,7 +192,7 @@ function toggleSearch() {
         attrFilterDiv.style.display = 'none';
       }
 
-      // 为二级按钮绑定事件
+      // 绑定二级按钮事件
       document.querySelectorAll('[data-tag]').forEach(btn => {
         btn.addEventListener('click', function() {
           document.querySelectorAll('[data-tag]').forEach(b => b.classList.remove('active'));
@@ -271,7 +202,7 @@ function toggleSearch() {
         });
       });
 
-      // 为三级按钮绑定事件
+      // 绑定三级按钮事件
       document.querySelectorAll('[data-attr]').forEach(btn => {
         btn.addEventListener('click', function() {
           document.querySelectorAll('[data-attr]').forEach(b => b.classList.remove('active'));
@@ -282,28 +213,19 @@ function toggleSearch() {
       });
     }
 
-    // 一级分类按钮点击事件
     categoryButtons.forEach(button => {
       button.addEventListener('click', function() {
         categoryButtons.forEach(btn => btn.classList.remove('active'));
         this.classList.add('active');
-
         currentCategory = this.dataset.category;
         currentTag = null;
         currentAttr = null;
-
-        // 重新生成二级、三级按钮
         generateSecondaryFilters(currentCategory);
-
-        // 重置所有文章的显示
-        allPosts.forEach(post => {
-          post.parentLi.style.display = '';
-        });
+        allPosts.forEach(post => post.parentLi.style.display = '');
         updatePosts();
       });
     });
 
-    // 初始化：默认选中“全部”，生成二级按钮
     generateSecondaryFilters('all');
 
     // 折叠/展开功能
@@ -323,33 +245,25 @@ function toggleSearch() {
       });
     });
 
-    // ========== 初始化全局搜索 ==========
+    // ---------- 初始化全局搜索（简单模板，确保稳定） ----------
     var searchInput = document.getElementById('search-input');
     if (searchInput) {
-      var sjs = SimpleJekyllSearch({
+      SimpleJekyllSearch({
         searchInput: searchInput,
         resultsContainer: document.getElementById('search-results'),
         json: '{{ site.baseurl }}/tags/search.json',
-        searchResultTemplate: '<div></div>', // 占位，实际用自定义渲染
-        noResultsText: '',
-        limit: 20,
+        searchResultTemplate: '<li><a href="{url}">{title}</a> <span class="result-date">({date})</span></li>',
+        noResultsText: '<li>没有找到相关文章</li>',
+        limit: 10,
         fuzzy: false
       });
-      
-      searchInput.addEventListener('input', function() {
-        var query = this.value.trim();
-        if (query.length < 2) {
-          document.getElementById('search-results').style.display = 'none';
-          return;
-        }
-        var results = sjs.search(query);
-        renderCustomResults(results, query);
-      });
+    } else {
+      console.error('搜索框未找到！');
     }
   });
 </script>
 
-<!-- 样式（已转为纯CSS，可以直接用） -->
+<!-- 样式（保持不变） -->
 <style>
   /* ===== 全局搜索框样式 ===== */
   .global-search {
@@ -400,54 +314,29 @@ function toggleSearch() {
     max-height: 500px;
     overflow-y: auto;
     padding-right: 10px;
+    list-style: none;
+    padding-left: 0;
   }
-
-  .search-result-item {
-    margin-bottom: 20px;
-    padding-bottom: 15px;
+  #search-results li {
+    margin-bottom: 10px;
+    padding-bottom: 5px;
     border-bottom: 1px dashed #ddd;
   }
-  .search-result-item h4 {
-    margin: 0 0 8px;
-    font-size: 18px;
-  }
-  .search-result-item h4 a {
+  #search-results li a {
     color: #333;
     text-decoration: none;
-  }
-  .search-result-item h4 a:hover {
-    color: #666;
-    text-decoration: underline;
-  }
-  .search-result-item h4 .result-date {
-    font-size: 13px;
-    font-weight: normal;
-    color: #999;
-    margin-left: 10px;
-  }
-  .search-result-item .result-snippet {
-    font-size: 14px;
-    line-height: 1.6;
-    color: #444;
-    background-color: #f9f9f9;
-    padding: 10px 12px;
-    border-radius: 6px;
-  }
-  .search-result-item .result-snippet mark {
-    background-color: #ffecb3;
-    padding: 2px 0;
-    border-radius: 2px;
     font-weight: 500;
   }
-
-  .no-results {
-    padding: 30px;
-    text-align: center;
+  #search-results li a:hover {
+    text-decoration: underline;
+  }
+  .result-date {
     color: #999;
-    font-size: 16px;
+    font-size: 12px;
+    margin-left: 8px;
   }
 
-  /* ===== 原有样式（保持不变） ===== */
+  /* ===== 原有样式 ===== */
   .category-filter {
     margin-bottom: 20px;
     text-align: center;
