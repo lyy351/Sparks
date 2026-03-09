@@ -4,10 +4,10 @@ layout: null
 [
   {% for post in site.posts %}
   {
-    "title" : "{{ post.title | escape }}",
-    "url"   : "{{ site.baseurl }}{{ post.url }}",
-    "date"  : "{{ post.date | date: '%Y-%m-%d' }}",
-    "content" : {{ post.content | strip_html | normalize_whitespace | jsonify }}
+    "title": "{{ post.title | escape }}",
+    "url": "{{ site.baseurl }}{{ post.url }}",
+    "date": "{{ post.date | date: '%Y-%m-%d' }}",
+    "content": {{ post.content | strip_html | normalize_whitespace | jsonify }}
   }{% unless forloop.last %},{% endunless %}
   {% endfor %}
 ]
