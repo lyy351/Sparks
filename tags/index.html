@@ -14,11 +14,12 @@ permalink: /tags/
   {% endfor %}
 </div>
 
-<!-- 标签文章列表区（默认全部显示） -->
+<!-- 标签文章列表区 -->
 <div class="tags-posts">
   {% for tag in site.tags %}
-    <div class="tag-section" data-category="{{ tag[0] | slugify }}">
-      <h2 id="{{ tag[0] | slugify }}">{{ tag[0] }}</h2>
+    {% assign current_tag = tag[0] %}
+    <div class="tag-section" data-category="{{ current_tag | slugify }}">
+      <h2 id="{{ current_tag | slugify }}">{{ current_tag }}</h2>
       <ul class="tag-posts">
         {% for post in tag[1] %}
           <li>
@@ -30,12 +31,24 @@ permalink: /tags/
               {% if post.tags.size > 0 %}
                 <div class="post-tags">
                   {% for other_tag in post.tags %}
-                    {% if other_tag != tag[0] %}
+                    {% if other_tag != current_tag %}
                       <a href="{{ site.baseurl }}/tags#{{ other_tag | slugify }}" class="tag-link">{{ other_tag }}</a>
                     {% endif %}
                   {% endfor %}
                 </div>
               {% endif %}
+
+              <!-- ========== 新增：显示这篇文章的属性 ========== -->
+              {% if post.attributes.size > 0 %}
+                <div class="post-attributes">
+                  <span class="meta-label">属性：</span>
+                  {% for attr in post.attributes %}
+                    <a href="{{ site.baseurl }}/attributes#{{ attr | slugify }}" class="attr-link">{{ attr }}</a>
+                  {% endfor %}
+                </div>
+              {% endif %}
+              <!-- ========== 新增结束 ========== -->
+
             </div>
           </li>
         {% endfor %}
@@ -44,7 +57,7 @@ permalink: /tags/
   {% endfor %}
 </div>
 
-<!-- JavaScript 控制筛选功能 -->
+<!-- JavaScript 控制筛选功能（不变） -->
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     const filterButtons = document.querySelectorAll('.filter-btn');
@@ -52,13 +65,11 @@ permalink: /tags/
 
     filterButtons.forEach(button => {
       button.addEventListener('click', function() {
-        // 按钮样式切换
         filterButtons.forEach(btn => btn.classList.remove('active'));
         this.classList.add('active');
 
         const selectedCategory = this.dataset.category;
 
-        // 显示/隐藏标签区块
         tagSections.forEach(section => {
           if (selectedCategory === 'all' || section.dataset.category === selectedCategory) {
             section.style.display = 'block';
@@ -71,11 +82,9 @@ permalink: /tags/
   });
 </script>
 
-<!-- 样式（如果还没在 style.scss 中添加过，可以放在这里，建议移动到 style.scss） -->
+<!-- 样式（建议移动到 style.scss） -->
 <style>
-  .tag-section {
-    margin-bottom: 2em;
-  }
+  .tag-section { margin-bottom: 2em; }
   .tag-posts {
     list-style: none;
     padding-left: 0;
@@ -85,9 +94,7 @@ permalink: /tags/
     border-bottom: 1px dashed #ccc;
     padding: 0.3em 0;
   }
-  .tag-posts li:before {
-    content: none !important;
-  }
+  .tag-posts li:before { content: none !important; }
   .tag-posts time {
     float: right;
     color: #666;
@@ -108,10 +115,34 @@ permalink: /tags/
     text-decoration: none;
     font-size: 12px;
   }
-  .tag-link:hover {
-    background-color: #e0e0e0;
+  .tag-link:hover { background-color: #e0e0e0; }
+
+  /* ========== 新增属性样式 ========== */
+  .post-attributes {
+    margin-top: 5px;
+    font-size: 13px;
   }
-  /* 筛选按钮样式（可复用分类页的，如果已定义可删除这里的） */
+  .meta-label {
+    color: #888;
+    margin-right: 5px;
+    font-size: 12px;
+  }
+  .attr-link {
+    display: inline-block;
+    margin: 0 3px 3px 0;
+    padding: 2px 8px;
+    background-color: #ffe6f0;   /* 浅粉色背景，和普通标签区分 */
+    border-radius: 12px;
+    color: #333;
+    text-decoration: none;
+    font-size: 12px;
+  }
+  .attr-link:hover {
+    background-color: #ffcce0;
+  }
+  /* ========== 新增结束 ========== */
+
+  /* 筛选按钮样式（可复用分类页的） */
   .category-filter {
     margin-bottom: 2em;
     text-align: center;
@@ -127,9 +158,7 @@ permalink: /tags/
     font-size: 14px;
     cursor: pointer;
   }
-  .filter-btn:hover {
-    background-color: #e0e0e0;
-  }
+  .filter-btn:hover { background-color: #e0e0e0; }
   .filter-btn.active {
     background-color: #666;
     color: #fff;
