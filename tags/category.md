@@ -4,7 +4,7 @@ title: 分类
 permalink: /category/
 ---
 
-<!-- 一级分类筛选按钮区（不变） -->
+<!-- 一级分类筛选按钮区 -->
 <div class="category-filter">
   <button class="filter-btn active" data-category="all">全部</button>
   {% for category in site.categories %}
@@ -16,14 +16,20 @@ permalink: /category/
 
 <!-- 二级标签按钮区（根据当前一级分类动态显示） -->
 <div id="tag-filter" class="secondary-filter" style="display: none;">
-  <h3>角色/CP</h3>
-  <div class="tag-buttons"></div>
+  <div class="filter-header">
+    <h3>角色/CP</h3>
+    <button class="toggle-btn" data-target="tag-buttons">收起</button>
+  </div>
+  <div class="tag-buttons filter-buttons expanded"></div>
 </div>
 
 <!-- 三级属性按钮区（根据当前一级分类动态显示） -->
 <div id="attr-filter" class="secondary-filter" style="display: none;">
-  <h3>题材/风格</h3>
-  <div class="attr-buttons"></div>
+  <div class="filter-header">
+    <h3>题材/风格</h3>
+    <button class="toggle-btn" data-target="attr-buttons">收起</button>
+  </div>
+  <div class="attr-buttons filter-buttons expanded"></div>
 </div>
 
 <!-- 文章列表区 -->
@@ -67,7 +73,7 @@ permalink: /category/
   {% endfor %}
 </div>
 
-<!-- JavaScript 控制多级筛选 -->
+<!-- JavaScript 控制多级筛选和折叠 -->
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     const categoryButtons = document.querySelectorAll('.filter-btn');
@@ -203,8 +209,7 @@ permalink: /category/
         // 重新生成二级、三级按钮
         generateSecondaryFilters(currentCategory);
 
-        // 先显示所有文章（由 generateSecondaryFilters 内的按钮事件负责筛选）
-        // 但需要先重置显示
+        // 重置所有文章的显示
         allPosts.forEach(post => {
           post.parentLi.style.display = '';
         });
@@ -214,23 +219,91 @@ permalink: /category/
 
     // 初始化：默认选中“全部”，生成二级按钮
     generateSecondaryFilters('all');
+
+    // 折叠/展开功能
+    document.querySelectorAll('.toggle-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const targetClass = this.dataset.target;
+        const targetDiv = document.querySelector('.' + targetClass);
+        if (targetDiv.classList.contains('expanded')) {
+          targetDiv.classList.remove('expanded');
+          targetDiv.classList.add('collapsed');
+          this.textContent = '展开';
+        } else {
+          targetDiv.classList.remove('collapsed');
+          targetDiv.classList.add('expanded');
+          this.textContent = '收起';
+        }
+      });
+    });
   });
 </script>
 
 <!-- 样式（建议移到 style.scss） -->
 <style>
+  .category-filter {
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  .filter-btn {
+    display: inline-block;
+    margin: 0 5px 10px 5px;
+    padding: 6px 12px;
+    background-color: #f0f0f0;
+    border: none;
+    border-radius: 20px;
+    color: #333;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .filter-btn:hover {
+    background-color: #e0e0e0;
+  }
+  .filter-btn.active {
+    background-color: #666;
+    color: #fff;
+    font-weight: bold;
+  }
+
   .secondary-filter {
     margin: 20px 0;
     padding: 15px;
     background-color: #f9f9f9;
     border-radius: 8px;
   }
-  .secondary-filter h3 {
-    margin-top: 0;
+  .filter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 10px;
+  }
+  .filter-header h3 {
+    margin: 0;
     font-size: 16px;
     color: #666;
   }
+  .toggle-btn {
+    background: none;
+    border: 1px solid #ccc;
+    padding: 2px 8px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 12px;
+  }
+  .toggle-btn:hover {
+    background-color: #f0f0f0;
+  }
+
+  .filter-buttons {
+    max-height: none;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+  .filter-buttons.collapsed {
+    max-height: 80px; /* 显示大约两行按钮的高度，可根据实际情况调整 */
+    overflow-y: auto;
+  }
+
   .secondary-btn {
     display: inline-block;
     margin: 0 5px 10px 0;
@@ -250,6 +323,20 @@ permalink: /category/
     color: #fff;
     font-weight: bold;
   }
+
+  .category-section {
+    margin-bottom: 30px;
+  }
+  .category-posts {
+    list-style: none;
+    padding-left: 0;
+  }
+  .category-posts li {
+    border-bottom: 1px dashed #ddd;
+  }
+  .category-posts li:before {
+    content: none !important;
+  }
   .post-item {
     padding: 10px 0;
   }
@@ -265,6 +352,7 @@ permalink: /category/
   .tag-link, .attr-link {
     display: inline-block;
     margin-right: 5px;
+    margin-bottom: 5px;
     padding: 2px 6px;
     background-color: #f0f0f0;
     border-radius: 12px;
@@ -274,18 +362,5 @@ permalink: /category/
   }
   .attr-link {
     background-color: #ffe6f0;
-  }
-  .category-section {
-    margin-bottom: 30px;
-  }
-  .category-posts {
-    list-style: none;
-    padding-left: 0;
-  }
-  .category-posts li {
-    border-bottom: 1px dashed #ddd;
-  }
-  .category-posts li:before {
-    content: none !important;
   }
 </style>
