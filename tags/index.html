@@ -4,41 +4,135 @@ title: 标签
 permalink: /tags/
 ---
 
-{% if site.posts.size == 0 %}
-  <h2>No post found</h2>
-{% endif %}
-
-<div class="tags">
-  <ul class="label">
-    {% for tag in site.tags %}
-    <li>
-      <a href="#{{ tag[0] }}">
-        <span>{{ tag[0] }}</span>
-        <span class="count">{{ tag[1] | size }}</span>
-      </a>
-    </li>
-    {% endfor %}
-  </ul>
-
+<!-- 标签筛选按钮区 -->
+<div class="category-filter">
+  <button class="filter-btn active" data-category="all">全部</button>
   {% for tag in site.tags %}
-    <h2 id="{{ tag[0] }}">
-      {{ tag[0] }}
-    </h2>
-    <ul class="tag">
-      {% for post in tag[1] %}
-        {% if post.title != null %}
-          <li>
-            {% if post.link %}
-              <a href="{{ post.link }}">
-            {% else %}
-              <a href="{{ site.baseurl }}{{ post.url }}">
-            {% endif %}
-                {{ post.title }}
-              </a>
-              <time>{{ post.date | date: "%Y-%m-%d" }}</time>
-          </li>
-        {% endif %}
-      {% endfor %}
-    </ul>
+    <button class="filter-btn" data-category="{{ tag[0] | slugify }}">
+      {{ tag[0] }} ({{ tag[1] | size }})
+    </button>
   {% endfor %}
 </div>
+
+<!-- 标签文章列表区（默认全部显示） -->
+<div class="tags-posts">
+  {% for tag in site.tags %}
+    <div class="tag-section" data-category="{{ tag[0] | slugify }}">
+      <h2 id="{{ tag[0] | slugify }}">{{ tag[0] }}</h2>
+      <ul class="tag-posts">
+        {% for post in tag[1] %}
+          <li>
+            <div class="post-item">
+              <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a>
+              <time>{{ post.date | date: "%Y-%m-%d" }}</time>
+
+              <!-- 显示这篇文章的其他标签（排除当前标签） -->
+              {% if post.tags.size > 0 %}
+                <div class="post-tags">
+                  {% for other_tag in post.tags %}
+                    {% if other_tag != tag[0] %}
+                      <a href="{{ site.baseurl }}/tags#{{ other_tag | slugify }}" class="tag-link">{{ other_tag }}</a>
+                    {% endif %}
+                  {% endfor %}
+                </div>
+              {% endif %}
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endfor %}
+</div>
+
+<!-- JavaScript 控制筛选功能 -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const tagSections = document.querySelectorAll('.tag-section');
+
+    filterButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        // 按钮样式切换
+        filterButtons.forEach(btn => btn.classList.remove('active'));
+        this.classList.add('active');
+
+        const selectedCategory = this.dataset.category;
+
+        // 显示/隐藏标签区块
+        tagSections.forEach(section => {
+          if (selectedCategory === 'all' || section.dataset.category === selectedCategory) {
+            section.style.display = 'block';
+          } else {
+            section.style.display = 'none';
+          }
+        });
+      });
+    });
+  });
+</script>
+
+<!-- 样式（如果还没在 style.scss 中添加过，可以放在这里，建议移动到 style.scss） -->
+<style>
+  .tag-section {
+    margin-bottom: 2em;
+  }
+  .tag-posts {
+    list-style: none;
+    padding-left: 0;
+  }
+  .tag-posts li {
+    margin-bottom: 10px;
+    border-bottom: 1px dashed #ccc;
+    padding: 0.3em 0;
+  }
+  .tag-posts li:before {
+    content: none !important;
+  }
+  .tag-posts time {
+    float: right;
+    color: #666;
+    font-size: 14px;
+  }
+  .post-tags {
+    display: inline-block;
+    margin-left: 15px;
+    font-size: 14px;
+  }
+  .tag-link {
+    display: inline-block;
+    margin: 0 3px;
+    padding: 2px 6px;
+    background-color: #f0f0f0;
+    border-radius: 12px;
+    color: #333;
+    text-decoration: none;
+    font-size: 12px;
+  }
+  .tag-link:hover {
+    background-color: #e0e0e0;
+  }
+  /* 筛选按钮样式（可复用分类页的，如果已定义可删除这里的） */
+  .category-filter {
+    margin-bottom: 2em;
+    text-align: center;
+  }
+  .filter-btn {
+    display: inline-block;
+    margin: 0 5px 10px 5px;
+    padding: 6px 12px;
+    background-color: #f0f0f0;
+    border: none;
+    border-radius: 20px;
+    color: #333;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .filter-btn:hover {
+    background-color: #e0e0e0;
+  }
+  .filter-btn.active {
+    background-color: #666;
+    color: #fff;
+    font-weight: bold;
+  }
+</style>
