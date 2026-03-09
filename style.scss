@@ -831,3 +831,33 @@ footer {
     }
   }
 }
+
+/* 分类筛选按钮样式 */
+.category-filter {
+  margin-bottom: 2em;
+  text-align: center;
+  
+  .filter-btn {
+    display: inline-block;
+    margin: 0 5px 10px 5px;
+    padding: 6px 12px;
+    background-color: $tag-index-label-background-color;
+    border: none;
+    border-radius: 20px;
+    color: $base-color;
+    font-size: $small-font-size;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background-color: $link-bghv-color;
+      color: $link-color;
+    }
+
+    &.active {
+      background-color: $link-lighten-color;
+      color: #ffffff;
+      font-weight: bold;
+    }
+  }
+}
