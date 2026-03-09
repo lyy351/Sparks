@@ -928,3 +928,20 @@ footer {
     background-color: $oc-pink-2;
   }
 }
+
+/* 二级/三级筛选栏背景改为纯白 */
+.secondary-filter {
+  background-color: #ffffff !important;  // 强制白色背景
+  border: 1px solid $divider-color;       // 可选：加一个浅粉色边框，与主题呼应
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02); // 可选：极淡阴影增加立体感
+
+  // 调整标题颜色，避免在白色背景上太淡
+  h3 {
+    color: $oc-gray-8;  // 深灰色，也可以用 $darkGray 或 #333
+  }
+}
+
+// 如果希望按钮在白色背景上更突出，可以微调按钮边框
+.secondary-btn {
+  border: 1px solid $oc-gray-3;  // 极浅灰边框，让按钮轮廓更清晰
+}
