@@ -4,6 +4,30 @@ title: 分类
 permalink: /category/
 ---
 
+<!-- ===== 全局搜索框（可折叠） ===== -->
+<div class="global-search">
+  <div class="search-toggle" onclick="toggleSearch()">🔍 搜索文章</div>
+  <div id="search-container" style="display: none;">
+    <input type="text" id="search-input" placeholder="输入关键词，搜索全文..." autocomplete="off">
+    <div id="search-results" style="display: none;"></div>
+  </div>
+</div>
+
+<script>
+function toggleSearch() {
+  var container = document.getElementById('search-container');
+  var toggle = document.querySelector('.search-toggle');
+  if (container.style.display === 'none') {
+    container.style.display = 'block';
+    toggle.textContent = '✕ 关闭搜索';
+    document.getElementById('search-input').focus();
+  } else {
+    container.style.display = 'none';
+    toggle.textContent = '🔍 搜索文章';
+  }
+}
+</script>
+
 <!-- 一级分类筛选按钮区 -->
 <div class="category-filter">
   <button class="filter-btn active" data-category="all">全部</button>
@@ -73,8 +97,63 @@ permalink: /category/
   {% endfor %}
 </div>
 
-<!-- JavaScript 控制多级筛选和折叠 -->
+<!-- 引入 Simple-Jekyll-Search -->
+<script src="https://unpkg.com/simple-jekyll-search@latest/dest/simple-jekyll-search.min.js"></script>
+
+<!-- 搜索结果模板（占位，实际用自定义渲染） -->
+<script id="search-results-template" type="text/x-template">
+  <div class="search-result-item">
+    <h4><a href="{url}?kw={query}">{title}</a> <span class="result-date">{date}</span></h4>
+    <div class="result-snippet">{snippet}</div>
+  </div>
+</script>
+
+<!-- JavaScript 控制多级筛选、折叠和全局搜索 -->
 <script>
+  // ========== 全局搜索相关函数 ==========
+  function extractSnippet(content, keyword, contextLength = 60) {
+    if (!content || !keyword) return '';
+    
+    var lowerContent = content.toLowerCase();
+    var lowerKeyword = keyword.toLowerCase();
+    var index = lowerContent.indexOf(lowerKeyword);
+    
+    if (index === -1) return content.substring(0, 200) + '…';
+    
+    var start = Math.max(0, index - contextLength);
+    var end = Math.min(content.length, index + keyword.length + contextLength);
+    
+    var snippet = (start > 0 ? '…' : '') + 
+                   content.substring(start, end) + 
+                   (end < content.length ? '…' : '');
+    
+    // 高亮关键词
+    var regex = new RegExp('(' + keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
+    return snippet.replace(regex, '<mark>$1</mark>');
+  }
+
+  function renderCustomResults(results, query) {
+    var container = document.getElementById('search-results');
+    container.style.display = 'block';
+    container.innerHTML = '';
+    
+    if (results.length === 0) {
+      container.innerHTML = '<p class="no-results">没有找到相关文章</p>';
+      return;
+    }
+    
+    results.forEach(function(result) {
+      var snippet = extractSnippet(result.content, query);
+      var html = '<div class="search-result-item">' +
+                 '<h4><a href="' + result.url + '?kw=' + encodeURIComponent(query) + '">' + 
+                 result.title + '</a> <span class="result-date">' + result.date + '</span></h4>' +
+                 '<div class="result-snippet">' + snippet + '</div>' +
+                 '</div>';
+      container.innerHTML += html;
+    });
+  }
+
+  // ========== 原有筛选逻辑保持不变 ==========
   document.addEventListener('DOMContentLoaded', function() {
     const categoryButtons = document.querySelectorAll('.filter-btn');
     const categorySections = document.querySelectorAll('.category-section');
@@ -114,7 +193,7 @@ permalink: /category/
         }
       });
 
-      // 更新分类区块的显示（如果该分类下没有可见文章，隐藏整个区块）
+      // 更新分类区块的显示
       categorySections.forEach(section => {
         const visiblePosts = Array.from(section.querySelectorAll('li')).filter(li => li.style.display !== 'none');
         section.style.display = visiblePosts.length > 0 ? 'block' : 'none';
@@ -236,11 +315,140 @@ permalink: /category/
         }
       });
     });
+
+    // ========== 初始化全局搜索 ==========
+    var searchInput = document.getElementById('search-input');
+    if (searchInput) {
+      var sjs = SimpleJekyllSearch({
+        searchInput: searchInput,
+        resultsContainer: document.getElementById('search-results'),
+        json: '{{ site.baseurl }}/search.json',
+        searchResultTemplate: '<div></div>', // 占位，实际用自定义渲染
+        noResultsText: '',
+        limit: 20,
+        fuzzy: false
+      });
+      
+      searchInput.addEventListener('input', function() {
+        var query = this.value.trim();
+        if (query.length < 2) {
+          document.getElementById('search-results').style.display = 'none';
+          return;
+        }
+        var results = sjs.search(query);
+        renderCustomResults(results, query);
+      });
+    }
   });
 </script>
 
 <!-- 样式（建议移到 style.scss） -->
 <style>
+  /* ===== 全局搜索框样式 ===== */
+  .global-search {
+    margin: 0 0 30px;
+    padding: 15px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+  }
+
+  .search-toggle {
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: #f0f0f0;
+    border-radius: 30px;
+    color: #333;
+    font-size: 14px;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.2s ease;
+    
+    &:hover {
+      background-color: #e0e0e0;
+    }
+  }
+
+  #search-container {
+    margin-top: 15px;
+  }
+
+  #search-input {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 30px;
+    outline: none;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+    
+    &:focus {
+      border-color: #999;
+      box-shadow: 0 0 0 3px rgba(0,0,0,0.05);
+    }
+  }
+
+  #search-results {
+    margin-top: 20px;
+    max-height: 500px;
+    overflow-y: auto;
+    padding-right: 10px;
+  }
+
+  .search-result-item {
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px dashed #ddd;
+    
+    h4 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      
+      a {
+        color: #333;
+        text-decoration: none;
+        
+        &:hover {
+          color: #666;
+          text-decoration: underline;
+        }
+      }
+      
+      .result-date {
+        font-size: 13px;
+        font-weight: normal;
+        color: #999;
+        margin-left: 10px;
+      }
+    }
+    
+    .result-snippet {
+      font-size: 14px;
+      line-height: 1.6;
+      color: #444;
+      background-color: #f9f9f9;
+      padding: 10px 12px;
+      border-radius: 6px;
+      
+      mark {
+        background-color: #ffecb3;
+        padding: 2px 0;
+        border-radius: 2px;
+        font-weight: 500;
+      }
+    }
+  }
+
+  .no-results {
+    padding: 30px;
+    text-align: center;
+    color: #999;
+    font-size: 16px;
+  }
+
+  /* ===== 原有样式（保持不变） ===== */
   .category-filter {
     margin-bottom: 20px;
     text-align: center;
@@ -300,7 +508,7 @@ permalink: /category/
     transition: max-height 0.3s ease;
   }
   .filter-buttons.collapsed {
-    max-height: 80px; /* 显示大约两行按钮的高度，可根据实际情况调整 */
+    max-height: 80px;
     overflow-y: auto;
   }
 
