@@ -766,3 +766,47 @@ footer {
   color: #000000;
 }
 
+.category-list {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 2em;
+  li {
+    display: inline-block;
+    margin: 0 10px 10px 0;
+    a {
+      display: inline-block;
+      padding: 4px 8px;
+      background-color: $tag-index-label-background-color;
+      border-radius: 3px;
+      color: $base-color;
+      text-decoration: none;
+      &:hover {
+        background-color: $link-bghv-color;
+      }
+      .count {
+        margin-left: 5px;
+        font-size: 0.9em;
+        color: $base-lighten-color;
+      }
+    }
+  }
+}
+
+.category-posts {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 2em;
+  li {
+    margin-bottom: 0.5em;
+    border-bottom: 1px dashed $divider-color;
+    padding: 0.3em 0;
+    a {
+      font-weight: 500;
+    }
+    time {
+      float: right;
+      color: $base-lighten-color;
+      font-size: $small-font-size;
+    }
+  }
+}
