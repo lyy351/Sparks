@@ -904,3 +904,27 @@ footer {
     font-size: $small-font-size;
   }
 }
+
+/* 属性标签样式（和普通标签区分） */
+.post-attributes {
+  margin-top: 5px;
+  font-size: 13px;
+}
+.meta-label {
+  color: $base-lighten-color;
+  margin-right: 5px;
+  font-size: 12px;
+}
+.attr-link {
+  display: inline-block;
+  margin: 0 3px 3px 0;
+  padding: 2px 8px;
+  background-color: $oc-pink-1;    // 浅粉色背景，和普通标签区分
+  border-radius: 12px;
+  color: $base-color;
+  text-decoration: none;
+  font-size: 12px;
+  &:hover {
+    background-color: $oc-pink-2;
+  }
+}
