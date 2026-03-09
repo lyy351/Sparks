@@ -3,8 +3,9 @@ layout: post
 title: Markdown语法简介
 date: 2013-07-16
 Author: Shengbin 
-categories: [博客, 技术]
-tags: [sample, markdown]
+categories: [建站更新日志]
+tags: [初始模板, Markdown, 配色, 教程] 
+attributes: []
 comments: true
 toc: true
 ---
