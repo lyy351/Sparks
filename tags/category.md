@@ -98,7 +98,14 @@ function toggleSearch() {
 </div>
 
 <!-- 引入 Simple-Jekyll-Search -->
-<script src="https://unpkg.com/simple-jekyll-search@latest/dest/simple-jekyll-search.min.js"></script>
+<script>
+/*!
+ * Simple-Jekyll-Search
+ * Copyright 2015-2020, Christian Fei
+ * Licensed under the MIT License.
+ */
+!function(){"use strict";var e={trim:function(e){return e.replace(/^\s+|\s+$/g,"")},isArray:function(e){return Array.isArray?Array.isArray(e):"[object Array]"===Object.prototype.toString.call(e)},isFunction:function(e){return"function"==typeof e},toArray:function(e){return Array.prototype.slice.call(e)},map:function(e,t){if(e.map)return e.map(t);for(var n=[],r=0;r<e.length;r++)n.push(t(e[r],r));return n},filter:function(e,t){if(e.filter)return e.filter(t);for(var n=[],r=0;r<e.length;r++)t(e[r],r)&&n.push(e[r]);return n},keys:function(e){if(Object.keys)return Object.keys(e);var t=[];for(var n in e)e.hasOwnProperty(n)&&t.push(n);return t}},t=function(e,t){t=t||{};var n=this;n.initialize=function(){n.options=t;var r=t.searchInput;if(n.$searchInput="string"==typeof r?document.querySelector(r):r,n.$searchInput)if(n.options.resultsContainer="string"==typeof t.resultsContainer?document.querySelector(t.resultsContainer):t.resultsContainer,n.$resultsContainer){var i=n.options.source;if(e.isFunction(i))n.searchFn=i;else if(e.isArray(i)){var o=n.options;n.searchFn=function(e){return function(t){return e.search(t,o)}}(i)}else{var s=n.options;n.searchFn=function(e){return function(t){return e.search(t,s)}}(i)}n.bindEvent()}else throw new Error("SimpleJekyllSearch: resultsContainer not found");else throw new Error("SimpleJekyllSearch: searchInput not found")},n.bindEvent=function(){n.$searchInput.addEventListener("input",function(e){var t=e.target.value;n.options.fuzzy&&(t=n.addFuzzy(t));var r=n.searchFn(t);if(e.isFunction(n.options.renderResults))n.options.renderResults(r);else{var i=n.options;n.renderResults(r,i)}})},n.addFuzzy=function(e){var t=n.options.fuzzy;return"."===t||","===t?e+"[^"+t+"]*"+t:e+t},n.renderResults=function(t,r){var i=r.resultsContainer;n.clearResults(i);if(t.length){var o=e.map(t,function(e){return r.resultTemplate.replace(/\{(\w*)\}/g,function(t,n){return e[n]?e[n]:""})}).join("");i.insertAdjacentHTML("beforeend",o)}else{var s=r.noResultsText||"No results found";i.insertAdjacentHTML("beforeend","<li>"+s+"</li>")}},n.clearResults=function(e){for(;e.firstChild;)e.removeChild(e.firstChild)},n.initialize()},n=new t(window.simpleJekyllSearch||{},window.simpleJekyllSearchOptions);window.SimpleJekyllSearch=function(e){return new t(e)},"function"==typeof define&&define.amd?define("SimpleJekyllSearch",function(){return t}):"undefined"!=typeof module&&module.exports&&(module.exports=t)}();
+</script>
 
 <!-- 搜索结果模板（占位，实际用自定义渲染） -->
 <script id="search-results-template" type="text/x-template">
