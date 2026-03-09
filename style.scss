@@ -861,3 +861,46 @@ footer {
     }
   }
 }
+
+/* 分类页文章标签样式 */
+.post-item {
+  padding: 8px 0;
+  
+  .post-tags {
+    display: inline-block;
+    margin-left: 15px;
+    font-size: $small-font-size;
+    
+    .tags-label {
+      color: $base-lighten-color;
+      margin-right: 5px;
+    }
+    
+    .tag-link {
+      display: inline-block;
+      margin: 0 3px;
+      padding: 2px 6px;
+      background-color: $tag-index-label-background-color;
+      border-radius: 12px;
+      color: $base-color;
+      text-decoration: none;
+      font-size: 12px;
+      
+      &:hover {
+        background-color: $link-bghv-color;
+        color: $link-lighten-color;
+      }
+    }
+  }
+}
+
+/* 调整文章列表项布局 */
+.category-posts li {
+  margin-bottom: 10px;
+  
+  time {
+    float: right;
+    color: $base-lighten-color;
+    font-size: $small-font-size;
+  }
+}
