@@ -28,13 +28,14 @@ permalink: /category/
               
               <!-- 新增：显示这篇文章的其他标签（排除当前分类本身） -->
               {% if post.tags.size > 0 %}
-                <div class="post-tags">
-                  <span class="tags-label">标签：</span>
-                  {% for tag in post.tags %}
-                    <!-- 只显示非当前分类的标签 -->
-                    {% if tag != category[0] %}
-                      <a href="{{ site.baseurl }}/tags#{{ tag | slugify }}" class="tag-link">#{{ tag }}</a>
-                    {% endif %}
+  <div class="post-tags">
+    {% for tag in post.tags %}
+      {% if tag != category[0] %}
+        <a href="{{ site.baseurl }}/tags#{{ tag | slugify }}" class="tag-link">{{ tag }}</a>
+      {% endif %}
+    {% endfor %}
+  </div>
+{% endif %}
                   {% endfor %}
                 </div>
               {% endif %}
