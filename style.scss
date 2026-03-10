@@ -966,11 +966,20 @@ footer {
   border-top: 1px solid $divider-color;
   display: flex;
   justify-content: space-between;
+
   a {
     max-width: 45%;
-    color: $link-color;
+    padding: 10px 20px;
+    border: 1px solid $divider-color;
+    background: $background-color;
+    color: $base-lighten-color;
+    text-decoration: none;
+    transition: all 0.3s ease;
+
     &:hover {
       color: $link-lighten-color;
+      border-color: $link-lighten-color;
+      background-color: $link-bghv-color;
     }
   }
 }
