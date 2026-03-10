@@ -1,5 +1,7 @@
 name: Build and Index
 on: [push]
+permissions:
+  contents: write   # 允许机器人推送 pagefind 文件夹回仓库
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -8,21 +10,34 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.2'
-          bundler-cache: true  # 自动安装并缓存 bundle 依赖
       - uses: actions/setup-node@v4
         with:
           node-version: '18'
+
+      - name: Create Gemfile
+        run: |
+          echo "source 'https://rubygems.org'" > Gemfile
+          echo "gem 'github-pages', group: :jekyll_plugins" >> Gemfile
+          echo "gem 'jekyll-paginate'" >> Gemfile
+
+      - name: Install Ruby dependencies
+        run: bundle install
+
       - name: Install pagefind
         run: npm install -g pagefind
+
       - name: Build Jekyll site
         run: bundle exec jekyll build
+
       - name: Run Pagefind
         run: npx pagefind --site _site --output-path _site/pagefind
+
       - name: Upload pagefind folder as artifact
         uses: actions/upload-artifact@v4
         with:
           name: pagefind
           path: _site/pagefind
+
       - name: Commit pagefind folder back to repo
         run: |
           cp -r _site/pagefind ./pagefind
