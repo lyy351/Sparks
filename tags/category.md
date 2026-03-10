@@ -17,11 +17,8 @@ permalink: /category/
             pageSize: 10,
             translations: {
                 placeholder: "搜索文章..."
-            },
-            // 精确选择文章标题
-            result: {
-                title: "article.posts h1"
             }
+            // 不再设置 result.title，让索引中的标题直接生效
         });
     });
 </script>
