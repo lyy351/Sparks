@@ -5,19 +5,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true  # 自动安装并缓存 bundle 依赖
       - uses: actions/setup-node@v4
         with:
           node-version: '18'
-      - name: Install dependencies
+      - name: Install pagefind
         run: npm install -g pagefind
       - name: Build Jekyll site
-        run: |
-          gem install bundler
-          bundle install
-          bundle exec jekyll build
+        run: bundle exec jekyll build
       - name: Run Pagefind
         run: npx pagefind --site _site --output-path _site/pagefind
-      - name: Upload pagefind folder
+      - name: Upload pagefind folder as artifact
         uses: actions/upload-artifact@v4
         with:
           name: pagefind
@@ -25,8 +26,12 @@ jobs:
       - name: Commit pagefind folder back to repo
         run: |
           cp -r _site/pagefind ./pagefind
-          git config user.name "github-actions"
-          git config user.email "actions@github.com"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
           git add pagefind/
-          git diff --quiet && git diff --staged --quiet || git commit -m "Update pagefind index"
-          git push
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Update pagefind index"
+            git push
+          fi
