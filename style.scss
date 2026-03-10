@@ -983,3 +983,28 @@ footer {
     }
   }
 }
+
+.tag-navigation {
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid $divider-color;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 40px;   /* 新增：增加底部间距 */
+
+  a {
+    max-width: 45%;
+    padding: 10px 20px;
+    border: 1px solid $divider-color;
+    background: $background-color;
+    color: $base-lighten-color;
+    text-decoration: none;
+    transition: all 0.3s ease;
+
+    &:hover {
+      color: $link-lighten-color;
+      border-color: $link-lighten-color;
+      background-color: $link-bghv-color;
+    }
+  }
+}
