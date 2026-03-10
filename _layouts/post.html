@@ -34,6 +34,33 @@ layout: default
   {% include gitalk.html %}
 </article>
 
+<!-- 按文章的第一个标签生成上一篇/下一篇导航 -->
+{% if page.tags.size > 0 %}
+  {% assign current_tag = page.tags[0] %}  <!-- 取第一个标签作为导航依据 -->
+  {% assign tag_posts = site.tags[current_tag] | sort: 'date' %}  <!-- 按日期排序（旧到新） -->
+  {% for post in tag_posts %}
+    {% if post.url == page.url %}
+      {% unless forloop.first %}
+        {% assign prev_index = forloop.index0 | minus: 1 %}
+        {% assign prev_post = tag_posts[prev_index] %}
+      {% endunless %}
+      {% unless forloop.last %}
+        {% assign next_index = forloop.index0 | plus: 1 %}
+        {% assign next_post = tag_posts[next_index] %}
+      {% endunless %}
+    {% endif %}
+  {% endfor %}
+
+  <div class="tag-navigation">
+    {% if prev_post %}
+      <a class="prev" href="{{ site.baseurl }}{{ prev_post.url }}">← 上一篇（{{ current_tag }}）</a>
+    {% endif %}
+    {% if next_post %}
+      <a class="next" href="{{ site.baseurl }}{{ next_post.url }}">下一篇（{{ current_tag }}） →</a>
+    {% endif %}
+  </div>
+{% endif %}
+
 <div class="pagination">
   {% if page.previous.url %}
     <span class="prev" >
