@@ -10,7 +10,16 @@ permalink: /about/
 
 ### 按分类浏览
 {% for category in site.categories %}
-- [**{{ category[0] }}**]({{ site.baseurl }}/category#{{ category[0] | slugify }}) ({{ category[1] | size }}篇)
+#### {{ category[0] }} ({{ category[1] | size }}篇)
+<ul>
+  {% for post in category[1] %}
+  <li>
+    <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a>
+    <span style="color:#999; font-size:0.9em;">({{ post.date | date: "%Y-%m-%d" }})</span>
+  </li>
+  {% endfor %}
+</ul>
+<p><a href="{{ site.baseurl }}/category#{{ category[0] | slugify }}">查看全部 {{ category[0] }} 文章</a></p>
 {% endfor %}
 
 ### 按标签浏览
