@@ -4,19 +4,20 @@ title: 分类
 permalink: /category/
 ---
 
-<!-- Pagefind 搜索框（修正版） -->
-<link href="{{ site.baseurl }}/pagefind/pagefind-ui.css" rel="stylesheet">
-<script src="{{ site.baseurl }}/pagefind/pagefind-ui.js"></script>
-<div id="search"></div>
 <script>
     window.addEventListener('DOMContentLoaded', (event) => {
         new PagefindUI({
             element: "#search",
-            baseUrl: "{{ site.baseurl }}",   // 确保 baseurl 正确传递
+            baseUrl: "{{ site.baseurl }}",
             showImages: false,
             resetStyles: false,
+            pageSize: 10,
             translations: {
                 placeholder: "搜索文章..."
+            },
+            // 关键：指定标题选择器
+            result: {
+                title: "h1"  // 告诉 Pagefind 从 h1 标签提取标题
             }
         });
     });
