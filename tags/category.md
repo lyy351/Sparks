@@ -18,8 +18,9 @@ permalink: /category/
             translations: {
                 placeholder: "搜索文章..."
             },
+            // 精确选择文章标题
             result: {
-                title: "h1"
+                title: "article.posts h1"
             }
         });
     });
