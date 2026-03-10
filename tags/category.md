@@ -4,6 +4,15 @@ title: 分类
 permalink: /category/
 ---
 
+<link href="{{ site.baseurl }}/pagefind/pagefind-ui.css" rel="stylesheet">
+<script src="{{ site.baseurl }}/pagefind/pagefind-ui.js"></script>
+<div id="search"></div>
+<script>
+    window.addEventListener('DOMContentLoaded', (event) => {
+        new PagefindUI({ element: "#search", baseUrl: "{{ site.baseurl }}" });
+    });
+</script>
+
 <!-- 一级分类筛选按钮区 -->
 <div class="category-filter">
   <button class="filter-btn active" data-category="all">全部</button>
