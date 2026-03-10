@@ -959,3 +959,18 @@ footer {
     background-color: $link-bghv-color;
   }
 }
+
+.tag-navigation {
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid $divider-color;
+  display: flex;
+  justify-content: space-between;
+  a {
+    max-width: 45%;
+    color: $link-color;
+    &:hover {
+      color: $link-lighten-color;
+    }
+  }
+}
