@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 📌 博客导航 · 置顶索引
+title: 博客导航 · 置顶索引
 date: 2026-03-10
 Author: 星火
 pinned: true
