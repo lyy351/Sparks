@@ -60,20 +60,3 @@ layout: default
     {% endif %}
   </div>
 {% endif %}
-
-<div class="pagination">
-  {% if page.previous.url %}
-    <span class="prev" >
-      <a href="{{ site.url }}../../..{{ page.previous.url }}">
-        ← 上一篇
-      </a>
-    </span>
-  {% endif %}
-  {% if page.next.url %}
-    <span class="next" >
-      <a href="{{ site.url }}../../..{{ page.next.url }}">
-        下一篇 →
-      </a>
-    </span>
-  {% endif %}
-</div>
