@@ -19,7 +19,6 @@ permalink: /category/
             translations: {
                 placeholder: "搜索文章..."
             }
-            // 不再指定 result.title，让索引中的标题直接生效
         });
     });
 </script>
