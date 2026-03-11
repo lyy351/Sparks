@@ -134,7 +134,6 @@ permalink: /tags/
     
     let html = '';
     results.slice(0, 20).forEach(post => {
-      // 高亮标题和正文片段
       const highlightedTitle = highlight(post.title, keyword);
       const highlightedExcerpt = highlight(post.excerpt, keyword);
       
@@ -260,17 +259,31 @@ permalink: /tags/
     background-color: #f9f9f9;
     padding: 8px 12px;
     border-radius: 6px;
-    /* 增加段落感 */
-    text-indent: 2em;        /* 首行缩进 */
-    line-height: 1.6;        /* 行高 */
-    margin-bottom: 10px;     /* 段落间距 */
-    white-space: pre-wrap;   /* 保留换行（如果有） */
+    line-height: 1.6;
+    margin-bottom: 10px;
   }
+  /* 处理摘要内的段落 */
+  .search-result-excerpt p {
+    margin: 0 0 0.5em 0;
+    text-indent: 2em;
+  }
+  .search-result-excerpt p:last-child {
+    margin-bottom: 0;
+  }
+
   /* 高亮样式 */
   mark {
-    background-color: #ffecb3;  /* 淡黄色背景 */
+    background-color: #ffecb3;
     padding: 2px 0;
     border-radius: 2px;
     font-weight: 500;
+  }
+
+  /* 隐藏输入框默认的清除/搜索图标（针对 WebKit 浏览器） */
+  #search-input::-webkit-search-decoration,
+  #search-input::-webkit-search-cancel-button,
+  #search-input::-webkit-search-results-button,
+  #search-input::-webkit-search-results-decoration {
+    display: none;
   }
 </style>
