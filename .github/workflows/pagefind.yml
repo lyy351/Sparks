@@ -22,8 +22,8 @@ jobs:
           echo "gem 'github-pages', group: :jekyll_plugins" >> Gemfile
           echo "gem 'jekyll-paginate'" >> Gemfile
 
-      - name: Install Ruby dependencies
-        run: bundle install
+      - name: Install pagefind
+        run: npm install -g pagefind@latest
 
       - name: Install pagefind
         run: npm install -g pagefind
