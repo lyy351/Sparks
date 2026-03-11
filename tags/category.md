@@ -4,10 +4,10 @@ title: 分类
 permalink: /category/
 ---
 
-<!-- 全文搜索框（标题+正文+摘要） -->
+<!-- 全文搜索框（无放大镜） -->
 <div style="margin-bottom: 30px;">
     <input type="text" id="search-input" placeholder="🔍 搜索文章标题或内容..." 
-           style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 30px; font-size: 16px; box-sizing: border-box;">
+           style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 30px; font-size: 16px; box-sizing: border-box; -webkit-appearance: none; -moz-appearance: none; appearance: none;">
 </div>
 <div id="search-results" style="margin-top: 20px;"></div>
 
@@ -223,11 +223,10 @@ permalink: /category/
   });
 </script>
 
-<!-- 新增：全文搜索功能 -->
+<!-- 全文搜索功能（带高亮） -->
 <script>
   let searchIndex = [];
 
-  // 加载 search.json
   fetch('{{ site.baseurl }}/search.json')
     .then(response => response.json())
     .then(data => {
@@ -235,6 +234,19 @@ permalink: /category/
       console.log('搜索索引加载完成，共', searchIndex.length, '篇文章');
     })
     .catch(error => console.error('搜索索引加载失败', error));
+
+  // 转义正则特殊字符，用于安全的高亮匹配
+  function escapeRegExp(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+
+  // 高亮文本中的关键词（不区分大小写）
+  function highlight(text, keyword) {
+    if (!keyword || !text) return text;
+    const escapedKeyword = escapeRegExp(keyword);
+    const regex = new RegExp(`(${escapedKeyword})`, 'gi');
+    return text.replace(regex, '<mark>$1</mark>');
+  }
 
   document.getElementById('search-input').addEventListener('input', function(e) {
     const keyword = this.value.toLowerCase().trim();
@@ -258,10 +270,13 @@ permalink: /category/
     
     let html = '';
     results.slice(0, 20).forEach(post => {
+      const highlightedTitle = highlight(post.title, keyword);
+      const highlightedExcerpt = highlight(post.excerpt, keyword);
+      
       html += `
         <div class="search-result-item">
-          <h4><a href="${post.url}" class="search-result-title">${post.title}</a> <span class="search-result-date">${post.date}</span></h4>
-          <div class="search-result-excerpt">${post.excerpt}</div>
+          <h4><a href="${post.url}" class="search-result-title">${highlightedTitle}</a> <span class="search-result-date">${post.date}</span></h4>
+          <div class="search-result-excerpt">${highlightedExcerpt}</div>
         </div>
       `;
     });
@@ -272,7 +287,7 @@ permalink: /category/
 
 <!-- 样式（整合原有筛选样式 + 搜索结果样式） -->
 <style>
-  /* ===== 原有样式（略，保持不变） ===== */
+  /* ===== 原有样式 ===== */
   .category-filter { margin-bottom: 20px; text-align: center; }
   .filter-btn {
     display: inline-block;
@@ -364,7 +379,7 @@ permalink: /category/
   }
   .attr-link { background-color: #ffe6f0; }
 
-  /* ===== 新增搜索结果样式 ===== */
+  /* ===== 搜索结果样式（带段落感） ===== */
   #search-results {
     margin-bottom: 30px;
     border-bottom: 1px solid #eee;
@@ -396,5 +411,17 @@ permalink: /category/
     background-color: #f9f9f9;
     padding: 8px 12px;
     border-radius: 6px;
+    /* 增加段落感 */
+    text-indent: 2em;        /* 首行缩进 */
+    line-height: 1.6;        /* 行高 */
+    margin-bottom: 10px;     /* 段落间距 */
+    white-space: pre-wrap;   /* 保留换行（如果有） */
+  }
+  /* 高亮样式 */
+  mark {
+    background-color: #ffecb3;  /* 淡黄色背景 */
+    padding: 2px 0;
+    border-radius: 2px;
+    font-weight: 500;
   }
 </style>
