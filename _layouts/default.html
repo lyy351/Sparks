@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   {% include head.html %}
-  <body>
+  <body {% unless page.layout == 'post' %}data-pagefind-ignore{% endunless %}>
     {% include nav.html %}
 
     {% if page.toc==true %}
@@ -18,6 +18,7 @@
 
     {% include analytics.html %}
   </body>
+</html>
 
   {% if page.toc==true %}
   <script>
