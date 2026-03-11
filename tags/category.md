@@ -4,6 +4,13 @@ title: 分类
 permalink: /category/
 ---
 
+<!-- 全文搜索框（标题+正文+摘要） -->
+<div style="margin-bottom: 30px;">
+    <input type="text" id="search-input" placeholder="🔍 搜索文章标题或内容..." 
+           style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 30px; font-size: 16px; box-sizing: border-box;">
+</div>
+<div id="search-results" style="margin-top: 20px;"></div>
+
 <!-- 一级分类筛选按钮区 -->
 <div class="category-filter">
   <button class="filter-btn active" data-category="all">全部</button>
@@ -73,7 +80,7 @@ permalink: /category/
   {% endfor %}
 </div>
 
-<!-- JavaScript 控制多级筛选和折叠 -->
+<!-- JavaScript 控制多级筛选和折叠（原有） -->
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     const categoryButtons = document.querySelectorAll('.filter-btn');
@@ -216,13 +223,57 @@ permalink: /category/
   });
 </script>
 
-<!-- 样式（只保留筛选相关样式） -->
+<!-- 新增：全文搜索功能 -->
+<script>
+  let searchIndex = [];
+
+  // 加载 search.json
+  fetch('{{ site.baseurl }}/search.json')
+    .then(response => response.json())
+    .then(data => {
+      searchIndex = data;
+      console.log('搜索索引加载完成，共', searchIndex.length, '篇文章');
+    })
+    .catch(error => console.error('搜索索引加载失败', error));
+
+  document.getElementById('search-input').addEventListener('input', function(e) {
+    const keyword = this.value.toLowerCase().trim();
+    const resultsDiv = document.getElementById('search-results');
+    
+    if (keyword.length < 2) {
+      resultsDiv.innerHTML = '';
+      return;
+    }
+    
+    const results = searchIndex.filter(post => {
+      return post.title.toLowerCase().includes(keyword) || 
+             post.content.toLowerCase().includes(keyword) ||
+             post.excerpt.toLowerCase().includes(keyword);
+    });
+    
+    if (results.length === 0) {
+      resultsDiv.innerHTML = '<p style="color: #999;">没有找到相关文章</p>';
+      return;
+    }
+    
+    let html = '';
+    results.slice(0, 20).forEach(post => {
+      html += `
+        <div class="search-result-item">
+          <h4><a href="${post.url}" class="search-result-title">${post.title}</a> <span class="search-result-date">${post.date}</span></h4>
+          <div class="search-result-excerpt">${post.excerpt}</div>
+        </div>
+      `;
+    });
+    
+    resultsDiv.innerHTML = html;
+  });
+</script>
+
+<!-- 样式（整合原有筛选样式 + 搜索结果样式） -->
 <style>
-  /* ===== 原有样式（无搜索） ===== */
-  .category-filter {
-    margin-bottom: 20px;
-    text-align: center;
-  }
+  /* ===== 原有样式（略，保持不变） ===== */
+  .category-filter { margin-bottom: 20px; text-align: center; }
   .filter-btn {
     display: inline-block;
     margin: 0 5px 10px 5px;
@@ -234,14 +285,8 @@ permalink: /category/
     font-size: 14px;
     cursor: pointer;
   }
-  .filter-btn:hover {
-    background-color: #e0e0e0;
-  }
-  .filter-btn.active {
-    background-color: #666;
-    color: #fff;
-    font-weight: bold;
-  }
+  .filter-btn:hover { background-color: #e0e0e0; }
+  .filter-btn.active { background-color: #666; color: #fff; font-weight: bold; }
 
   .secondary-filter {
     margin: 20px 0;
@@ -255,11 +300,7 @@ permalink: /category/
     align-items: center;
     margin-bottom: 10px;
   }
-  .filter-header h3 {
-    margin: 0;
-    font-size: 16px;
-    color: #666;
-  }
+  .filter-header h3 { margin: 0; font-size: 16px; color: #666; }
   .toggle-btn {
     background: none;
     border: 1px solid #ccc;
@@ -268,9 +309,7 @@ permalink: /category/
     cursor: pointer;
     font-size: 12px;
   }
-  .toggle-btn:hover {
-    background-color: #f0f0f0;
-  }
+  .toggle-btn:hover { background-color: #f0f0f0; }
 
   .filter-buttons {
     max-height: none;
@@ -293,18 +332,10 @@ permalink: /category/
     font-size: 13px;
     cursor: pointer;
   }
-  .secondary-btn:hover {
-    background-color: #e0e0e0;
-  }
-  .secondary-btn.active {
-    background-color: #666;
-    color: #fff;
-    font-weight: bold;
-  }
+  .secondary-btn:hover { background-color: #e0e0e0; }
+  .secondary-btn.active { background-color: #666; color: #fff; font-weight: bold; }
 
-  .category-section {
-    margin-bottom: 30px;
-  }
+  .category-section { margin-bottom: 30px; }
   .category-posts {
     list-style: none;
     padding-left: 0;
@@ -312,21 +343,14 @@ permalink: /category/
   .category-posts li {
     border-bottom: 1px dashed #ddd;
   }
-  .category-posts li:before {
-    content: none !important;
-  }
-  .post-item {
-    padding: 10px 0;
-  }
+  .category-posts li:before { content: none !important; }
+  .post-item { padding: 10px 0; }
   .post-item time {
     float: right;
     color: #999;
     font-size: 13px;
   }
-  .post-tags, .post-attributes {
-    margin-top: 5px;
-    font-size: 12px;
-  }
+  .post-tags, .post-attributes { margin-top: 5px; font-size: 12px; }
   .tag-link, .attr-link {
     display: inline-block;
     margin-right: 5px;
@@ -338,7 +362,39 @@ permalink: /category/
     text-decoration: none;
     font-size: 11px;
   }
-  .attr-link {
-    background-color: #ffe6f0;
+  .attr-link { background-color: #ffe6f0; }
+
+  /* ===== 新增搜索结果样式 ===== */
+  #search-results {
+    margin-bottom: 30px;
+    border-bottom: 1px solid #eee;
+  }
+  .search-result-item {
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px dashed #ddd;
+  }
+  .search-result-item h4 {
+    margin: 0 0 8px;
+    font-size: 18px;
+  }
+  .search-result-title {
+    color: #333;
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .search-result-title:hover { text-decoration: underline; }
+  .search-result-date {
+    font-size: 13px;
+    font-weight: normal;
+    color: #999;
+    margin-left: 10px;
+  }
+  .search-result-excerpt {
+    font-size: 14px;
+    color: #666;
+    background-color: #f9f9f9;
+    padding: 8px 12px;
+    border-radius: 6px;
   }
 </style>
