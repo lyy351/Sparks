@@ -4,14 +4,24 @@ title: 分类
 permalink: /category/
 ---
 
-<!-- Google 站内搜索（简洁版） -->
-<div style="margin-bottom: 30px;">
-    <form action="https://www.google.com/search" method="get" target="_blank">
-        <input type="hidden" name="as_sitesearch" value="lyy351.github.io/Sparks">
-        <input type="text" name="q" placeholder=" 搜索文章（Google）" 
-               style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 30px; font-size: 16px; box-sizing: border-box;">
-    </form>
-</div>
+<!-- Pagefind 站内搜索（唯一搜索框） -->
+<link href="{{ site.baseurl }}/pagefind/pagefind-ui.css" rel="stylesheet">
+<script src="{{ site.baseurl }}/pagefind/pagefind-ui.js"></script>
+<div id="search"></div>
+<script>
+    window.addEventListener('DOMContentLoaded', (event) => {
+        new PagefindUI({
+            element: "#search",
+            baseUrl: "{{ site.baseurl }}",
+            showImages: false,
+            resetStyles: false,
+            pageSize: 10,
+            translations: {
+                placeholder: "搜索文章..."
+            }
+        });
+    });
+</script>
 
 <!-- 一级分类筛选按钮区 -->
 <div class="category-filter">
