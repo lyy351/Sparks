@@ -17,19 +17,18 @@
     </div>
 
     {% include analytics.html %}
+
+    <!-- 这些原本在 body 后面的内容移到 body 内 -->
+    {% if page.toc==true %}
+    <script>
+      document.getElementById("main").classList.add("withtoc");
+    </script>
+    {% endif %}
+
+    <div class="wrapper-footer-mobile">
+      <footer class="footer">
+        {% include footer.html %}
+      </footer>
+    </div>
   </body>
-</html>
-
-  {% if page.toc==true %}
-  <script>
-    document.getElementById("main").classList.add("withtoc");
-  </script>
-  {% endif %}
-
-  <div class="wrapper-footer-mobile">
-    <footer class="footer">
-      {% include footer.html %}
-    </footer>
-
-
 </html>
