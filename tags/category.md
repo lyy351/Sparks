@@ -4,25 +4,6 @@ title: 分类
 permalink: /category/
 ---
 
-<!-- Pagefind 搜索框（正确版） -->
-<link href="{{ site.baseurl }}/pagefind/pagefind-ui.css" rel="stylesheet">
-<script src="{{ site.baseurl }}/pagefind/pagefind-ui.js"></script>
-<div id="search"></div>
-<script>
-    window.addEventListener('DOMContentLoaded', (event) => {
-        new PagefindUI({
-            element: "#search",
-            baseUrl: "{{ site.baseurl }}",
-            showImages: false,
-            resetStyles: false,
-            pageSize: 10,
-            translations: {
-                placeholder: "搜索文章..."
-            }
-        });
-    });
-</script>
-
 <!-- 一级分类筛选按钮区 -->
 <div class="category-filter">
   <button class="filter-btn active" data-category="all">全部</button>
@@ -92,7 +73,7 @@ permalink: /category/
   {% endfor %}
 </div>
 
-<!-- JavaScript 控制多级筛选和折叠（无搜索） -->
+<!-- JavaScript 控制多级筛选和折叠 -->
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     const categoryButtons = document.querySelectorAll('.filter-btn');
