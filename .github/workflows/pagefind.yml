@@ -8,10 +8,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # 获取完整提交历史，便于处理冲突
+          fetch-depth: 0
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.2'
+          bundler-cache: true  # 自动安装并缓存 bundle 依赖
       - uses: actions/setup-node@v4
         with:
           node-version: '18'
@@ -21,19 +22,22 @@ jobs:
           echo "source 'https://rubygems.org'" > Gemfile
           echo "gem 'github-pages', group: :jekyll_plugins" >> Gemfile
           echo "gem 'jekyll-paginate'" >> Gemfile
+          echo "gem 'jekyll'" >> Gemfile   # 显式添加 jekyll，确保可执行文件存在
+
+      - name: Install Ruby dependencies
+        run: |
+          bundle install
+          bundle exec jekyll -v   # 测试 jekyll 是否可用
 
       - name: Install pagefind
         run: npm install -g pagefind@latest
-
-      - name: Install pagefind
-        run: npm install -g pagefind
 
       - name: Build Jekyll site
         run: bundle exec jekyll build
 
       - name: Run Pagefind
         run: npx pagefind --site _site --output-path _site/pagefind
-  
+
       - name: Upload pagefind folder as artifact
         uses: actions/upload-artifact@v4
         with:
@@ -42,7 +46,6 @@ jobs:
 
       - name: Commit pagefind folder back to repo
         run: |
-          # 复制生成的 pagefind 文件夹到工作区根目录
           cp -r _site/pagefind ./pagefind
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -51,8 +54,6 @@ jobs:
             echo "No changes to commit"
           else
             git commit -m "Update pagefind index"
-            # 先拉取远程最新更改并合并，避免推送冲突
             git pull --no-rebase origin master || echo "Pull failed, will attempt push anyway"
-            # 再次尝试推送，如果仍然失败，使用安全的强制推送（--force-with-lease）
             git push || git push --force-with-lease
           fi
