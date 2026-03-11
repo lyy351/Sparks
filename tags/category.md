@@ -92,7 +92,7 @@ permalink: /category/
   {% endfor %}
 </div>
 
-<!-- 原有的筛选 JavaScript 代码（必须保留） -->
+<!-- JavaScript 控制多级筛选和折叠（无搜索） -->
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     const categoryButtons = document.querySelectorAll('.filter-btn');
@@ -140,6 +140,7 @@ permalink: /category/
         }
       });
 
+      // 标签按钮
       tagButtonsDiv.innerHTML = '';
       if (tagsSet.size > 0) {
         tagFilterDiv.style.display = 'block';
@@ -159,6 +160,7 @@ permalink: /category/
         tagFilterDiv.style.display = 'none';
       }
 
+      // 属性按钮
       attrButtonsDiv.innerHTML = '';
       if (attrsSet.size > 0) {
         attrFilterDiv.style.display = 'block';
@@ -178,6 +180,7 @@ permalink: /category/
         attrFilterDiv.style.display = 'none';
       }
 
+      // 绑定二级按钮事件
       document.querySelectorAll('[data-tag]').forEach(btn => {
         btn.addEventListener('click', function() {
           document.querySelectorAll('[data-tag]').forEach(b => b.classList.remove('active'));
@@ -187,6 +190,7 @@ permalink: /category/
         });
       });
 
+      // 绑定三级按钮事件
       document.querySelectorAll('[data-attr]').forEach(btn => {
         btn.addEventListener('click', function() {
           document.querySelectorAll('[data-attr]').forEach(b => b.classList.remove('active'));
@@ -212,6 +216,7 @@ permalink: /category/
 
     generateSecondaryFilters('all');
 
+    // 折叠/展开功能
     document.querySelectorAll('.toggle-btn').forEach(btn => {
       btn.addEventListener('click', function() {
         const targetClass = this.dataset.target;
@@ -229,3 +234,130 @@ permalink: /category/
     });
   });
 </script>
+
+<!-- 样式（只保留筛选相关样式） -->
+<style>
+  /* ===== 原有样式（无搜索） ===== */
+  .category-filter {
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  .filter-btn {
+    display: inline-block;
+    margin: 0 5px 10px 5px;
+    padding: 6px 12px;
+    background-color: #f0f0f0;
+    border: none;
+    border-radius: 20px;
+    color: #333;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .filter-btn:hover {
+    background-color: #e0e0e0;
+  }
+  .filter-btn.active {
+    background-color: #666;
+    color: #fff;
+    font-weight: bold;
+  }
+
+  .secondary-filter {
+    margin: 20px 0;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+  }
+  .filter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .filter-header h3 {
+    margin: 0;
+    font-size: 16px;
+    color: #666;
+  }
+  .toggle-btn {
+    background: none;
+    border: 1px solid #ccc;
+    padding: 2px 8px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 12px;
+  }
+  .toggle-btn:hover {
+    background-color: #f0f0f0;
+  }
+
+  .filter-buttons {
+    max-height: none;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+  .filter-buttons.collapsed {
+    max-height: 80px;
+    overflow-y: auto;
+  }
+
+  .secondary-btn {
+    display: inline-block;
+    margin: 0 5px 10px 0;
+    padding: 4px 10px;
+    background-color: #f0f0f0;
+    border: none;
+    border-radius: 16px;
+    color: #333;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  .secondary-btn:hover {
+    background-color: #e0e0e0;
+  }
+  .secondary-btn.active {
+    background-color: #666;
+    color: #fff;
+    font-weight: bold;
+  }
+
+  .category-section {
+    margin-bottom: 30px;
+  }
+  .category-posts {
+    list-style: none;
+    padding-left: 0;
+  }
+  .category-posts li {
+    border-bottom: 1px dashed #ddd;
+  }
+  .category-posts li:before {
+    content: none !important;
+  }
+  .post-item {
+    padding: 10px 0;
+  }
+  .post-item time {
+    float: right;
+    color: #999;
+    font-size: 13px;
+  }
+  .post-tags, .post-attributes {
+    margin-top: 5px;
+    font-size: 12px;
+  }
+  .tag-link, .attr-link {
+    display: inline-block;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    padding: 2px 6px;
+    background-color: #f0f0f0;
+    border-radius: 12px;
+    color: #333;
+    text-decoration: none;
+    font-size: 11px;
+  }
+  .attr-link {
+    background-color: #ffe6f0;
+  }
+</style>
