@@ -26,8 +26,5 @@
     });
   </script>
 
-  <!-- 新增：让 Pagefind 正确提取文章标题 -->
-  {% if page.layout == 'post' %}
-  <meta name="pagefind-title" content="{{ page.title | escape }}">
-  {% endif %}
+  <!-- 删除了 Pagefind 的 meta 标签 -->
 </head>
