@@ -32,8 +32,8 @@ jobs:
         run: bundle exec jekyll build
 
       - name: Run Pagefind
-        run: npx pagefind --site _site --output-path _site/pagefind --root-selector "article.posts"
-
+        run: npx pagefind --site _site --output-path _site/pagefind --root-selector "article.posts" --title "article.posts h1"
+  
       - name: Upload pagefind folder as artifact
         uses: actions/upload-artifact@v4
         with:
