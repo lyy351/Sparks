@@ -400,11 +400,11 @@ permalink: /category/
   .search-result-title {
   display: inline-block;
   padding: 6px 12px;
-  background-color: #ffffff;    /* 浅粉色背景 */
+  background-color: #ffffff;    /* 白色背景 */
   border: 2px solid #e64980;     /* 中粉色边框 */
   border-radius: 20px;
   font-weight: bold;
-  color: #fcc2d7;                /* 白色文字 */
+  color: #fcc2d7;                /* 浅粉色文字 */
   text-decoration: none;
   line-height: 1.4;
   max-width: 100%;
