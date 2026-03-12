@@ -404,7 +404,7 @@ permalink: /category/
   border: 2px solid #e64980;     /* 中粉色边框 */
   border-radius: 20px;
   font-weight: bold;
-  color: #fcc2d7;                /* 浅粉色文字 */
+  color: #e64980;                /* 中粉色文字 */
   text-decoration: none;
   line-height: 1.4;
   max-width: 100%;
