@@ -37,7 +37,7 @@ layout: default
 <!-- 如果文章设置了 music_file，则插入音频（静音预加载 + 交互唤醒） -->
 {% if page.music_file %}
   <audio id="bgm" loop preload="auto">
-    <source src="{{ site.baseurl }}/assets/music/{{ page.music_file }}" type="audio/mpeg">
+    <source src="{{ page.music_file }}" type="audio/mpeg">
     您的浏览器不支持 audio 元素。
   </audio>
   <script>
