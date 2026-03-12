@@ -34,6 +34,38 @@ layout: default
   {% include gitalk.html %}
 </article>
 
+<!-- 如果文章设置了 music_file，则插入音频（静音预加载 + 交互唤醒） -->
+{% if page.music_file %}
+  <audio id="bgm" loop preload="auto">
+    <source src="{{ site.baseurl }}/assets/music/{{ page.music_file }}" type="audio/mpeg">
+    您的浏览器不支持 audio 元素。
+  </audio>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const audio = document.getElementById('bgm');
+      if (audio) {
+        // 先静音预加载（浏览器允许自动播放静音视频/音频）
+        audio.muted = true;
+        audio.play().catch(function(error) {
+          console.log('自动播放失败（可能是浏览器限制），等待用户交互后播放');
+        });
+
+        // 用户与页面首次交互（点击、触摸、键盘）时取消静音
+        const unmute = function() {
+          audio.muted = false;
+          // 移除监听器，只执行一次
+          document.removeEventListener('click', unmute);
+          document.removeEventListener('touchstart', unmute);
+          document.removeEventListener('keydown', unmute);
+        };
+        document.addEventListener('click', unmute, { once: true });
+        document.addEventListener('touchstart', unmute, { once: true });
+        document.addEventListener('keydown', unmute, { once: true });
+      }
+    });
+  </script>
+{% endif %}
+
 <!-- 按文章的第一个标签生成上一篇/下一篇导航 -->
 {% if page.tags.size > 0 %}
   {% assign current_tag = page.tags[0] %}
