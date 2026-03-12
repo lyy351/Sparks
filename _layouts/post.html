@@ -29,6 +29,27 @@ layout: default
     {{ content }}
   </div>
 
+  <!-- ===== 新增：跳转按钮（如果文章设置了 external_url） ===== -->
+  {% if page.external_url %}
+  <div style="text-align: center; margin: 30px 0;">
+    <a href="{{ page.external_url }}" target="_blank" rel="noopener noreferrer" style="
+      display: inline-block;
+      padding: 12px 24px;
+      background-color: #fcc2d7;      /* 浅粉色背景 */
+      border: 2px solid #e64980;       /* 中粉色边框 */
+      border-radius: 30px;             /* 圆角 */
+      font-size: 16px;
+      font-weight: bold;
+      color: #333;                     /* 深灰色文字 */
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    ">
+      🎵 点击收听完整歌曲（跳转B站）
+    </a>
+  </div>
+  {% endif %}
+
   {% include disqus.html %}
   {% include utteranc.html %}
   {% include gitalk.html %}
@@ -44,16 +65,13 @@ layout: default
     document.addEventListener('DOMContentLoaded', function() {
       const audio = document.getElementById('bgm');
       if (audio) {
-        // 先静音预加载（浏览器允许自动播放静音视频/音频）
         audio.muted = true;
         audio.play().catch(function(error) {
           console.log('自动播放失败（可能是浏览器限制），等待用户交互后播放');
         });
 
-        // 用户与页面首次交互（点击、触摸、键盘）时取消静音
         const unmute = function() {
           audio.muted = false;
-          // 移除监听器，只执行一次
           document.removeEventListener('click', unmute);
           document.removeEventListener('touchstart', unmute);
           document.removeEventListener('keydown', unmute);
