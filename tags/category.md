@@ -390,20 +390,36 @@ permalink: /category/
     border-bottom: 1px dashed #ddd;
   }
   .search-result-item h4 {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
     margin: 0 0 8px;
     font-size: 18px;
   }
   .search-result-title {
-    color: #333;
+    display: inline-block;
+    padding: 6px 12px;
+    background-color: #e8e8e8;       /* 浅灰背景 */
+    border: 2px solid #aaa;           /* 粗框线 */
+    border-radius: 20px;              /* 圆角 */
+    font-weight: bold;
+    color: #222;                      /* 深灰文字 */
     text-decoration: none;
-    font-weight: 500;
+    line-height: 1.4;
+    max-width: 100%;
+    word-break: break-word;
+    transition: background-color 0.2s, border-color 0.2s;
   }
-  .search-result-title:hover { text-decoration: underline; }
+  .search-result-title:hover {
+    background-color: #d0d0d0;
+    border-color: #888;
+  }
   .search-result-date {
     font-size: 13px;
     font-weight: normal;
-    color: #999;
-    margin-left: 10px;
+    color: #666;                      /* 深灰色 */
+    white-space: nowrap;               /* 日期不换行 */
   }
   .search-result-excerpt {
     font-size: 14px;
@@ -413,6 +429,8 @@ permalink: /category/
     border-radius: 6px;
     line-height: 1.6;
     margin-bottom: 10px;
+    max-height: 106px;                 /* 约4行文字的高度 */
+    overflow-y: auto;
   }
   /* 处理摘要内的段落 */
   .search-result-excerpt p {
