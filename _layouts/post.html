@@ -29,7 +29,7 @@ layout: default
     {{ content }}
   </div>
 
-  <!-- ===== 新增：跳转按钮（如果文章设置了 external_url） ===== -->
+  <!-- ===== 跳转按钮（如果文章设置了 external_url） ===== -->
   {% if page.external_url %}
   <div style="text-align: center; margin: 30px 0;">
     <a href="{{ page.external_url }}" target="_blank" rel="noopener noreferrer" style="
@@ -54,35 +54,6 @@ layout: default
   {% include utteranc.html %}
   {% include gitalk.html %}
 </article>
-
-<!-- 如果文章设置了 music_file，则插入音频（静音预加载 + 交互唤醒） -->
-{% if page.music_file %}
-  <audio id="bgm" loop preload="auto">
-    <source src="{{ page.music_file }}" type="audio/mpeg">
-    您的浏览器不支持 audio 元素。
-  </audio>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const audio = document.getElementById('bgm');
-      if (audio) {
-        audio.muted = true;
-        audio.play().catch(function(error) {
-          console.log('自动播放失败（可能是浏览器限制），等待用户交互后播放');
-        });
-
-        const unmute = function() {
-          audio.muted = false;
-          document.removeEventListener('click', unmute);
-          document.removeEventListener('touchstart', unmute);
-          document.removeEventListener('keydown', unmute);
-        };
-        document.addEventListener('click', unmute, { once: true });
-        document.addEventListener('touchstart', unmute, { once: true });
-        document.addEventListener('keydown', unmute, { once: true });
-      }
-    });
-  </script>
-{% endif %}
 
 <!-- 按文章的第一个标签生成上一篇/下一篇导航 -->
 {% if page.tags.size > 0 %}
