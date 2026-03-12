@@ -418,7 +418,7 @@ permalink: /category/
   .search-result-date {
   font-size: 13px;
   font-weight: normal;
-  color: #e0a8b5;                /* 柔和深粉色 */
+  color: #e64980;                /* 中粉色 */
   white-space: nowrap;
   }
   .search-result-excerpt {
