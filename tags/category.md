@@ -398,28 +398,28 @@ permalink: /category/
     font-size: 18px;
   }
   .search-result-title {
-    display: inline-block;
-    padding: 6px 12px;
-    background-color: #e8e8e8;       /* 浅灰背景 */
-    border: 2px solid #aaa;           /* 粗框线 */
-    border-radius: 20px;              /* 圆角 */
-    font-weight: bold;
-    color: #222;                      /* 深灰文字 */
-    text-decoration: none;
-    line-height: 1.4;
-    max-width: 100%;
-    word-break: break-word;
-    transition: background-color 0.2s, border-color 0.2s;
+  display: inline-block;
+  padding: 6px 12px;
+  background-color: #fcc2d7;    /* 浅粉色背景 */
+  border: 2px solid #e64980;     /* 中粉色边框 */
+  border-radius: 20px;
+  font-weight: bold;
+  color: #333;                   /* 深灰色文字 */
+  text-decoration: none;
+  line-height: 1.4;
+  max-width: 100%;
+  word-break: break-word;
+  transition: background-color 0.2s, border-color 0.2s;
   }
   .search-result-title:hover {
-    background-color: #d0d0d0;
-    border-color: #888;
+  background-color: #faa2c1;     /* 悬停稍深粉 */
+  border-color: #d6336c;          /* 悬停更深粉 */
   }
   .search-result-date {
-    font-size: 13px;
-    font-weight: normal;
-    color: #666;                      /* 深灰色 */
-    white-space: nowrap;               /* 日期不换行 */
+  font-size: 13px;
+  font-weight: normal;
+  color: #888;                    /* 柔和灰色 */
+  white-space: nowrap;
   }
   .search-result-excerpt {
     font-size: 14px;
