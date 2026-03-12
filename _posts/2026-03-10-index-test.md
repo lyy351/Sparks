@@ -5,7 +5,7 @@ date: 2026-03-10
 Author: 星火
 pinned: true
 tags: [索引]
-external_url: https://space.bilibili.com/你的UID
+external_url: https://www.bilibili.com/video/BV1cChqzqEHF/
 ---
 
 欢迎来到我的小站！这里汇总了博客的主要板块和精选文章，方便你快速找到感兴趣的内容。
