@@ -5,7 +5,7 @@ date: 2026-03-10
 Author: 星火
 pinned: true
 tags: [索引]
-music_file: http://你的空间域名.bkt.clouddn.com/你的音乐文件名.mp3 
+external_url: https://space.bilibili.com/你的UID
 ---
 
 欢迎来到我的小站！这里汇总了博客的主要板块和精选文章，方便你快速找到感兴趣的内容。
