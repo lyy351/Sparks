@@ -6,6 +6,7 @@ layout: default
   <h2>No post found</h2>
 {% endif %}
 
+<!-- 调试信息：显示文章总数和列表（确认后可以删除） -->
 <h2 style="color: red;">调试信息：文章总数 = {{ site.posts.size }}</h2>
 <ul>
 {% for post in site.posts %}
@@ -58,45 +59,44 @@ layout: default
     {% endif %}
   {% endfor %}
 
-  <!-- 再显示所有非置顶文章（按日期倒序） -->
-  {% assign regular_posts = site.posts | where: "pinned", false | sort: "date" | reverse %}
-  {% for post in regular_posts %}
-    <article class="post">
-      <h1>
-        <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a>
-      </h1>
+  <!-- 显示所有非置顶文章（直接用 unless 判断） -->
+  {% for post in site.posts %}
+    {% unless post.pinned %}
+      <article class="post">
+        <h1>
+          <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a>
+        </h1>
 
-      <div clsss="meta">
-        <span class="author">
-          {{ post.author }}
-        </span>
-        <span class="date">
-          {{ post.date | date: "%Y-%m-%d" }}
-        </span>
-        <ul class="tag">
-          {% for tag in post.tags %}
-          <li>
-            <a href="{{ site.url }}{{ site.baseurl }}/tags#{{ tag }}">
-              {{ tag }}
-            </a>
-          </li>
-          {% endfor %}
-        </ul>
-      </div>
+        <div clsss="meta">
+          <span class="author">
+            {{ post.author }}
+          </span>
+          <span class="date">
+            {{ post.date | date: "%Y-%m-%d" }}
+          </span>
+          <ul class="tag">
+            {% for tag in post.tags %}
+            <li>
+              <a href="{{ site.url }}{{ site.baseurl }}/tags#{{ tag }}">
+                {{ tag }}
+              </a>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
 
-      <div class="post-excerpt">
-        {% if post.content contains site.excerpt_separator or post.content != post.excerpt %}
-          {{ post.excerpt }}
-        {% else %}
-          {{ post.content | lstrip | split: "
+        <div class="post-excerpt">
+          {% if post.content contains site.excerpt_separator or post.content != post.excerpt %}
+            {{ post.excerpt }}
+          {% else %}
+            {{ post.content | lstrip | split: "
 " | first }}
-        {% endif %}
-        <p>
-          <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">Read More</a>
-        </p>
-      </div>
-    </article>  
+          {% endif %}
+          <p>
+            <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">Read More</a>
+          </p>
+        </div>
+      </article>  
+    {% endunless %}
   {% endfor %}
 </div>
-
-<!-- 删除原来的分页代码（不再需要） -->
