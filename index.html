@@ -17,9 +17,9 @@ layout: default
 
 <div class="posts">
   
-  <!-- 先显示所有置顶文章 -->
+  <!-- 先显示所有置顶文章（用 if post.pinned 判断，只要字段为真就显示） -->
   {% for post in site.posts %}
-    {% if post.pinned == true %}
+    {% if post.pinned %}
       <article class="post pinned">
         <h1>
           <span title="pinned"><i data-feather="anchor"></i></span><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a>
@@ -59,7 +59,7 @@ layout: default
     {% endif %}
   {% endfor %}
 
-  <!-- 显示所有非置顶文章（直接用 unless 判断） -->
+  <!-- 显示所有非置顶文章（用 unless post.pinned 判断，只要字段为假就显示） -->
   {% for post in site.posts %}
     {% unless post.pinned %}
       <article class="post">
