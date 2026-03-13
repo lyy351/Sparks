@@ -6,6 +6,14 @@ layout: default
   <h2>No post found</h2>
 {% endif %}
 
+<h2 style="color: red;">调试信息：文章总数 = {{ site.posts.size }}</h2>
+<ul>
+{% for post in site.posts %}
+  <li>{{ post.date | date: "%Y-%m-%d" }} - {{ post.title }} (pinned: {{ post.pinned }})</li>
+{% endfor %}
+</ul>
+<hr>
+
 <div class="posts">
   
   <!-- 先显示所有置顶文章 -->
