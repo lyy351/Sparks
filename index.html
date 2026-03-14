@@ -51,7 +51,7 @@ layout: default
 </style>
 
 <div class="posts">
-  <!-- 手动筛选置顶文章和普通文章 -->
+  {% comment %} 手动收集所有文章，分成置顶和非置顶两组 {% endcomment %}
   {% assign pinned_posts = "" | split: "" %}
   {% assign normal_posts = "" | split: "" %}
   {% for post in site.posts %}
@@ -62,12 +62,12 @@ layout: default
     {% endif %}
   {% endfor %}
 
-  <!-- 按日期降序排序（最新的在前） -->
-  {% assign pinned_posts = pinned_posts | sort: "date" | reverse %}
-  {% assign normal_posts = normal_posts | sort: "date" | reverse %}
+  {% comment %} 按日期降序排序（最新在前） {% endcomment %}
+  {% assign pinned_sorted = pinned_posts | sort: "date" | reverse %}
+  {% assign normal_sorted = normal_posts | sort: "date" | reverse %}
 
-  <!-- 先显示置顶文章 -->
-  {% for post in pinned_posts %}
+  {% comment %} 先显示置顶文章 {% endcomment %}
+  {% for post in pinned_sorted %}
     <article class="post">
       <h1>
         <span class="pinned-icon" title="置顶">📌</span>
@@ -94,8 +94,8 @@ layout: default
     </article>
   {% endfor %}
 
-  <!-- 再显示普通文章 -->
-  {% for post in normal_posts %}
+  {% comment %} 再显示普通文章 {% endcomment %}
+  {% for post in normal_sorted %}
     <article class="post">
       <h1>
         <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a>
