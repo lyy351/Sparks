@@ -51,12 +51,43 @@ layout: default
 </style>
 
 <div class="posts">
-  {% for post in site.posts reversed %}
+  <!-- 筛选置顶文章并按日期降序排序 -->
+  {% assign pinned_posts = site.posts | where: "pinned", true | sort: "date" | reverse %}
+  <!-- 筛选非置顶文章并按日期降序排序（没有 pinned 字段或 pinned 不为 true 的文章） -->
+  {% assign normal_posts = site.posts | where_exp: "post", "post.pinned != true" | sort: "date" | reverse %}
+
+  <!-- 先显示置顶文章 -->
+  {% for post in pinned_posts %}
     <article class="post">
       <h1>
-        {% if post.pinned %}
-          <span class="pinned-icon" title="置顶">📌</span>
+        <span class="pinned-icon" title="置顶">📌</span>
+        <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a>
+      </h1>
+      <div class="meta">
+        <span class="author">{{ post.author }}</span>
+        <span class="date">{{ post.date | date: "%Y-%m-%d" }}</span>
+        <ul class="tag">
+          {% for tag in post.tags %}
+            <li><a href="{{ site.url }}{{ site.baseurl }}/tags#{{ tag }}">{{ tag }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="post-excerpt">
+        {% if post.content contains site.excerpt_separator %}
+          {{ post.excerpt }}
+        {% else %}
+          {{ post.content | lstrip | split: "
+" | first }}
         {% endif %}
+        <p><a class="post-link" href="{{ post.url | prepend: site.baseurl }}">Read More</a></p>
+      </div>
+    </article>
+  {% endfor %}
+
+  <!-- 再显示普通文章 -->
+  {% for post in normal_posts %}
+    <article class="post">
+      <h1>
         <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a>
       </h1>
       <div class="meta">
