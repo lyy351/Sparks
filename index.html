@@ -2,12 +2,113 @@
 layout: default
 ---
 
-<!-- 置顶区块 -->
+<style>
+  /* 文章卡片基础样式 */
+  .post {
+    border-bottom: 1px solid #eee;
+    padding: 20px 0;
+  }
+  .post h2 {
+    font-size: 24px;
+    margin: 0 0 10px;
+  }
+  .meta {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 10px;
+  }
+  .meta .author,
+  .meta .date,
+  .meta .tag {
+    display: inline-block;
+    margin-right: 10px;
+  }
+  .tag {
+    list-style: none;
+    padding: 0;
+    display: inline;
+  }
+  .tag li {
+    display: inline;
+    margin-right: 5px;
+  }
+  .tag li a {
+    color: #0366d6;
+    text-decoration: none;
+  }
+  /* 文章正文展开/折叠样式 */
+  .post-content {
+    overflow: hidden;
+    max-height: 200px;           /* 默认折叠高度，显示约10行文字 */
+    transition: max-height 0.3s ease;
+    position: relative;
+  }
+  .post-content.expanded {
+    max-height: 2000px;          /* 展开后足够高显示全文 */
+  }
+  /* 折叠时的渐变遮罩 */
+  .post-content:not(.expanded)::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3em;
+    background: linear-gradient(transparent, #fff5f7);
+    pointer-events: none;
+  }
+  .toggle-btn {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 4px 12px;
+    background-color: #fcc2d7;
+    border: 1px solid #e64980;
+    border-radius: 16px;
+    color: #333;
+    font-size: 14px;
+    cursor: pointer;
+    user-select: none;
+  }
+  /* 置顶区块单独样式 */
+  .pinned-section {
+    background-color: #fff0f5;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+  }
+  .section-title {
+    color: #8e44ad;
+    font-size: 20px;
+    margin-top: 0;
+  }
+  /* 排序按钮样式 */
+  .posts-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  .sort-buttons button {
+    padding: 6px 16px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: 0.2s;
+    margin-left: 8px;
+  }
+  .sort-buttons button:hover {
+    background-color: #e0e0e0;
+  }
+</style>
+
+<!-- ========== 置顶文章区块 ========== -->
 {% assign pinned_posts = site.posts | where: "pinned", true %}
 {% if pinned_posts.size > 0 %}
 <div class="pinned-section">
   <h2 class="section-title">📌 置顶文章</h2>
   {% for post in pinned_posts %}
+    {% assign post_id = "pinned-" | append: forloop.index %}
     <div class="post pinned">
       <h2><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h2>
       <div class="meta">
@@ -19,18 +120,17 @@ layout: default
           {% endfor %}
         </ul>
       </div>
-      <!-- 置顶文章的全文展开/折叠（这里放完整正文内容） -->
-      <div class="post-content expandable">
+      <div class="post-content" id="{{ post_id }}">
         {{ post.content }}
-        <label class="toggle-btn" for="pinned-{{ post.id }}">展开</label>
       </div>
+      <span class="toggle-btn" data-target="{{ post_id }}">展开</span>
     </div>
   {% endfor %}
 </div>
 <hr>
 {% endif %}
 
-<!-- 普通文章列表 + 排序按钮 -->
+<!-- ========== 普通文章列表 + 排序按钮 ========== -->
 <div class="posts-header">
   <h2>📄 所有文章</h2>
   <div class="sort-buttons">
@@ -39,10 +139,10 @@ layout: default
   </div>
 </div>
 
-<!-- 文章容器，用于JS动态排序 -->
 <div id="posts-container" class="posts">
   {% assign normal_posts = site.posts | where_exp: "post", "post.pinned != true" | sort: "date" | reverse %}
   {% for post in normal_posts %}
+    {% assign post_id = "normal-" | append: forloop.index %}
     <div class="post" data-date="{{ post.date | date: '%Y%m%d%H%M%S' }}">
       <h2><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h2>
       <div class="meta">
@@ -54,32 +154,50 @@ layout: default
           {% endfor %}
         </ul>
       </div>
-      <!-- 普通文章的全文展开/折叠 -->
-      <div class="post-content expandable">
+      <div class="post-content" id="{{ post_id }}">
         {{ post.content }}
-        <label class="toggle-btn" for="post-{{ forloop.index }}">展开</label>
       </div>
+      <span class="toggle-btn" data-target="{{ post_id }}">展开</span>
     </div>
   {% endfor %}
 </div>
 
-<!-- 排序功能的JavaScript -->
+<!-- ========== 排序 & 展开/折叠 JavaScript ========== -->
 <script>
-  function sortPosts(order) {
+  (function() {
+    // 排序功能
     const container = document.getElementById('posts-container');
-    const posts = Array.from(container.children);
-    
-    posts.sort((a, b) => {
-      const dateA = a.dataset.date;
-      const dateB = b.dataset.date;
-      return order === 'asc' ? dateA.localeCompare(dateB) : dateB.localeCompare(dateA);
-    });
-    
-    // 重新排列DOM
-    container.innerHTML = '';
-    posts.forEach(post => container.appendChild(post));
-  }
+    if (container) {
+      function sortPosts(order) {
+        const posts = Array.from(container.children);
+        posts.sort((a, b) => {
+          const dateA = a.dataset.date;
+          const dateB = b.dataset.date;
+          return order === 'asc' ? dateA.localeCompare(dateB) : dateB.localeCompare(dateA);
+        });
+        container.innerHTML = '';
+        posts.forEach(post => container.appendChild(post));
+      }
+      document.getElementById('sort-asc')?.addEventListener('click', () => sortPosts('asc'));
+      document.getElementById('sort-desc')?.addEventListener('click', () => sortPosts('desc'));
+    }
 
-  document.getElementById('sort-asc').addEventListener('click', () => sortPosts('asc'));
-  document.getElementById('sort-desc').addEventListener('click', () => sortPosts('desc'));
+    // 展开/折叠功能
+    document.querySelectorAll('.toggle-btn').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetId = this.dataset.target;
+        const content = document.getElementById(targetId);
+        if (!content) return;
+
+        if (content.classList.contains('expanded')) {
+          content.classList.remove('expanded');
+          this.textContent = '展开';
+        } else {
+          content.classList.add('expanded');
+          this.textContent = '收起';
+        }
+      });
+    });
+  })();
 </script>
