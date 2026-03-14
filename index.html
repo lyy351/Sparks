@@ -3,9 +3,7 @@ layout: default
 ---
 
 <div class="posts">
-  <!-- 按日期降序排列所有文章（最新的在前） -->
-  {% assign sorted_posts = site.posts | sort: "date" | reverse %}
-  {% for post in sorted_posts %}
+  {% for post in site.posts reversed %}
     <article class="post{% if post.pinned %} pinned{% endif %}">
       <h1>
         {% if post.pinned %}
