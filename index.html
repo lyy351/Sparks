@@ -3,12 +3,11 @@ layout: default
 ---
 
 <div class="posts">
-  <!-- 按日期倒序排列所有文章（最新的在前） -->
-  {% assign all_posts = site.posts | sort: "date" | reverse %}
-  {% for post in all_posts %}
+  <!-- 直接按文章默认顺序反转（最新的在前） -->
+  {% for post in site.posts reversed %}
     <article class="post">
       <h1>
-        <!-- 保留置顶图标（如果有的话） -->
+        <!-- 如果有置顶，显示锚图标 -->
         {% if post.pinned %}
           <span title="pinned"><i data-feather="anchor"></i></span>
         {% endif %}
