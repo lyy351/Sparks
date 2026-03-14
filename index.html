@@ -73,7 +73,7 @@ layout: default
   .section-header {
     background-color: #ffffff;
     border: 4px solid #8e44ad;
-    border-radius: 12px;               /* 圆角边框 */
+    border-radius: 12px;
     padding: 15px 20px;
     margin-bottom: 20px;
     width: 100%;
@@ -98,12 +98,12 @@ layout: default
     background-color: #e0e0e0;
   }
 
-  /* 文章列表容器（无边框） */
+  /* 文章列表容器无边框 */
   .pinned-posts, .posts {
-    /* 不加边框，只保留原有样式 */
+    /* 不加边框 */
   }
 
-  /* ===== 响应式布局 ===== */
+  /* ===== 响应式布局：电脑版（默认） ===== */
   .mobile-view {
     display: none;
   }
@@ -116,21 +116,21 @@ layout: default
     }
   }
 
-  /* Swiper 手机滑动样式 */
+  /* ===== Swiper 手机滑动样式 ===== */
   .swiper-container {
     width: 100%;
     height: 100%;
   }
   .swiper-slide {
     overflow-y: auto;
-    padding: 0 2px 20px 2px;           /* 边距调窄 */
+    padding: 0 2px 20px 2px;  /* 边距调窄 */
     box-sizing: border-box;
   }
 </style>
 
 <!-- ========== 手机版：Swiper 滑动 ========== -->
 <div class="mobile-view">
-  <!-- 引入 Swiper CSS 和 JS -->
+  <!-- 引入 Swiper -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
@@ -207,6 +207,7 @@ layout: default
   </div>
 
   <script>
+    // 初始化手机版 Swiper
     var mobileSwiper = new Swiper('#mobileSwiper', {
       loop: false,
       pagination: { el: '.swiper-pagination', clickable: true },
@@ -215,6 +216,7 @@ layout: default
     // 手机版排序
     function sortMobilePosts(order) {
       const container = document.getElementById('mobile-posts-container');
+      if (!container) return;
       const posts = Array.from(container.children);
       posts.sort((a, b) => {
         const dateA = a.dataset.date;
@@ -224,32 +226,18 @@ layout: default
       container.innerHTML = '';
       posts.forEach(post => container.appendChild(post));
     }
-    document.querySelector('.sort-asc-mobile')?.addEventListener('click', () => sortMobilePosts('asc'));
-    document.querySelector('.sort-desc-mobile')?.addEventListener('click', () => sortMobilePosts('desc'));
-
-    // 全局展开/折叠
-    function bindToggleButtons() {
-      document.querySelectorAll('.toggle-btn').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-          e.preventDefault();
-          const targetId = this.dataset.target;
-          const content = document.getElementById(targetId);
-          if (!content) return;
-          if (content.classList.contains('expanded')) {
-            content.classList.remove('expanded');
-            this.textContent = '展开';
-          } else {
-            content.classList.add('expanded');
-            this.textContent = '收起';
-          }
-        });
-      });
-    }
-    bindToggleButtons();
+    document.querySelector('.sort-asc-mobile')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      sortMobilePosts('asc');
+    });
+    document.querySelector('.sort-desc-mobile')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      sortMobilePosts('desc');
+    });
   </script>
 </div>
 
-<!-- ========== 电脑版：传统上下布局 ========== -->
+<!-- ========== 电脑版：传统上下滚动 ========== -->
 <div class="desktop-view">
   <!-- 置顶文章标题行（单独框） -->
   {% assign pinned_posts = site.posts | where: "pinned", true %}
@@ -281,12 +269,12 @@ layout: default
     <hr>
   {% endif %}
 
-  <!-- 所有文章标题行（单独框，带排序） -->
+  <!-- 所有文章标题行（带排序按钮） -->
   <div class="section-header">
     <h2>📄 所有文章</h2>
     <div class="sort-buttons">
-      <button id="sort-asc-desktop">正序</button>
-      <button id="sort-desc-desktop">倒序</button>
+      <button id="sort-asc">正序</button>
+      <button id="sort-desc">倒序</button>
     </div>
   </div>
 
@@ -314,9 +302,10 @@ layout: default
   </div>
 </div>
 
-<!-- ===== 电脑版排序脚本 ===== -->
+<!-- ===== 全局展开/折叠脚本（统一处理所有页面） ===== -->
 <script>
-  (function() {
+  document.addEventListener('DOMContentLoaded', function() {
+    // 电脑版排序
     const desktopContainer = document.getElementById('desktop-posts-container');
     if (desktopContainer) {
       function sortDesktop(order) {
@@ -329,8 +318,31 @@ layout: default
         desktopContainer.innerHTML = '';
         posts.forEach(post => desktopContainer.appendChild(post));
       }
-      document.getElementById('sort-asc-desktop')?.addEventListener('click', () => sortDesktop('asc'));
-      document.getElementById('sort-desc-desktop')?.addEventListener('click', () => sortDesktop('desc'));
+      document.getElementById('sort-asc')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        sortDesktop('asc');
+      });
+      document.getElementById('sort-desc')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        sortDesktop('desc');
+      });
     }
-  })();
+
+    // 展开/折叠功能（同时作用于电脑版和手机版）
+    document.querySelectorAll('.toggle-btn').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetId = this.dataset.target;
+        const content = document.getElementById(targetId);
+        if (!content) return;
+        if (content.classList.contains('expanded')) {
+          content.classList.remove('expanded');
+          this.textContent = '展开';
+        } else {
+          content.classList.add('expanded');
+          this.textContent = '收起';
+        }
+      });
+    });
+  });
 </script>
