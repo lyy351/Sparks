@@ -2,16 +2,63 @@
 layout: default
 ---
 
+<style>
+  .post {
+    border-bottom: 1px solid #eee;
+    padding: 20px 0;
+  }
+  .post h1 {
+    font-size: 24px;
+    margin: 0 0 10px;
+  }
+  .meta {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 10px;
+  }
+  .meta .author,
+  .meta .date,
+  .meta .tag {
+    display: inline-block;
+    margin-right: 10px;
+  }
+  .tag {
+    list-style: none;
+    padding: 0;
+    display: inline;
+  }
+  .tag li {
+    display: inline;
+    margin-right: 5px;
+  }
+  .tag li a {
+    color: #0366d6;
+    text-decoration: none;
+  }
+  .post-excerpt {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  .post-link {
+    display: inline-block;
+    margin-top: 10px;
+    color: #0366d6;
+  }
+  .pinned-icon {
+    color: #ffc107;
+    margin-right: 5px;
+  }
+</style>
+
 <div class="posts">
   {% for post in site.posts reversed %}
     <article class="post">
       <h1>
         {% if post.pinned %}
-          <span title="pinned"><i data-feather="anchor"></i></span>
+          <span class="pinned-icon" title="置顶">📌</span>
         {% endif %}
         <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a>
       </h1>
-
       <div class="meta">
         <span class="author">{{ post.author }}</span>
         <span class="date">{{ post.date | date: "%Y-%m-%d" }}</span>
@@ -21,7 +68,6 @@ layout: default
           {% endfor %}
         </ul>
       </div>
-
       <div class="post-excerpt">
         {% if post.content contains site.excerpt_separator %}
           {{ post.excerpt }}
@@ -34,6 +80,3 @@ layout: default
     </article>
   {% endfor %}
 </div>
-
-<!-- 统一加载 feather 图标 -->
-<script>feather.replace()</script>
