@@ -1057,3 +1057,12 @@ footer {
 .sort-buttons button:hover {
   background-color: #e0e0e0;
 }
+
+.site-footer {
+    word-break: break-word;      /* 允许长单词/URL换行 */
+    overflow-wrap: break-word;   /* 现代浏览器的换行属性 */
+    max-width: 100%;             /* 确保容器不溢出 */
+}
+.site-footer a {
+    word-break: break-all;       /* 必要时可在任意字符处换行（更激进） */
+}
